@@ -44,7 +44,7 @@ if not os.path.exists(base_dir):
     os.makedirs(base_dir)
 os.chdir(base_dir)
 
-user_info_full_url = USER_INFO_URL.format(handle=handle, count=MAX_SUBS)
+user_info_full_url = USER_INFO_URL.format(handle=handle, count=MAX_SUBS+1)
 print('Fetching user status:', user_info_full_url)
 dic = json.loads(urllib.request.urlopen(user_info_full_url).read())
 if dic['status'] != u'OK':
@@ -82,7 +82,7 @@ for submission in submissions:
     file = open(file_name, 'w')
     file.write(result)
     file.close()
-    print("[INFO] saved as {}".format(file_name))
+    print("[INFO] **NEW** {}".format(file_name))
     cnt += 1
 
 end_time = time.time()
