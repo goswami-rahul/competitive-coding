@@ -4,12 +4,15 @@ import sys
 import time, os
 from bs4 import BeautifulSoup
 
-MAX_SUBS = 1000000
-if (len(sys.argv) < 2):
-    print('Usage: python main.py <handle>')
-    exit(1)
-
-handle = sys.argv[1]
+handle = "rahulgoswami"
+s = input("What's your codeforces handle?? [ENTER and skip if its me :p]\n> ")
+if s:
+    handle = s
+MAX_SUBS = input("How many submissions do want?? [ENTER and skip for all]\n> ")
+if MAX_SUBS:
+    MAX_SUBS = int(MAX_SUBS)
+else:
+    MAX_SUBS = 1000000
 
 DOWNLOAD_DIR = '.'
 SUBMISSION_URL = 'http://codeforces.com/contest/{ContestId}/submission/{SubmissionId}'
@@ -52,10 +55,19 @@ submissions = [submission for submission in dic['result'] if submission['verdict
 print('Fetching %d submissions' % len(submissions))
 
 start_time = time.time()
+cnt = 0
 for submission in submissions:
     con_id, sub_id = submission['contestId'], submission['id'],
     prob_name, prob_id = submission['problem']['name'], submission['problem']['index']
     comp_lang = submission['programmingLanguage']
+    
+    ext = get_ext(comp_lang)
+    prob_name = prob_name.replace(" ", "_")
+    file_name = "{:04d}{}_({}).{}".format(con_id, prob_id, prob_name, ext)
+    if os.path.exists(file_name):
+        print("[INFO] already have {}".format(file_name))
+        continue
+    
     submission_full_url = SUBMISSION_URL.format(ContestId=con_id, SubmissionId=sub_id)
     print("Fetching submission:", submission_full_url)
     submission_info = urllib.request.urlopen(submission_full_url).read()
@@ -65,16 +77,15 @@ for submission in submissions:
         print("Could not fetch solution", sub_id)
         continue
     result = submission_text.text.replace('\r', '')
-    ext = get_ext(comp_lang)
-    new_directory = base_dir + '/' + str(con_id)
-    prob_name = prob_name.replace(" ", "_")
-    file_name = "{:04d}{}_({}).{}".format(con_id, prob_id, prob_name, ext)
     if ext == "txt": 
         print(comp_lang, "language extension not found")
     file = open(file_name, 'w')
     file.write(result)
     file.close()
-end_time = time.time()
+    print("[INFO] saved as {}".format(file_name))
+    cnt += 1
 
+end_time = time.time()
 duration_secs = int(end_time - start_time)
+print("\n{} new files!".format(cnt))
 print("Finished in %d minutes %d seconds" % (duration_secs / 60, duration_secs % 60))
