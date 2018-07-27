@@ -65,7 +65,7 @@ int main()
 			break;
 		}
 	}
-	if (i < 5) cout << "NO";
+	if (i != 5) cout << "NO";
 	else cout << "YES";
     return 0;
 }
