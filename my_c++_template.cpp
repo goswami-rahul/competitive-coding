@@ -1,9 +1,3 @@
-# competitive-coding
-Repository to maintain record of my competitive coding solutions (C++ and Python).
-
----
-My C++14 competitive coding template:
-```c++
 #include<bits/stdc++.h>
 using namespace std;
 #define ll long long int
@@ -28,6 +22,8 @@ using namespace std;
 #define FOR(i, a, b) for(ll i=a; i<=b; i++)
 #define RFOR(i, b, a) for(ll i=b; i>=a; i--)
 #define all(vec) (vec).begin(),(vec).end()
+
+#define debug(args...)     (Debugger()) , args
 
 #define error(args...) { string _s = #args; replace(_s.begin(), _s.end(), ',', ' '); stringstream _ss(_s); istream_iterator<string> _it(_ss); err(_it, args); }
 void err(istream_iterator<string> it) {}
@@ -115,4 +111,3 @@ int main()
 
     return 0;
 }
-```
