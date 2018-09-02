@@ -16,7 +16,7 @@ else:
 
 DOWNLOAD_DIR = '.'
 SUBMISSION_URL = 'http://codeforces.com/contest/{ContestId}/submission/{SubmissionId}'
-USER_INFO_URL = 'http://codeforces.com/api/user.status?handle={handle}&from=5&count={count}'
+USER_INFO_URL = 'http://codeforces.com/api/user.status?handle={handle}&from=1&count={count}'
 
 EXT = {'C++': 'cpp', 'Python 3': 'py', 
        'PyPy 3': 'py', 'PyPy': 'py', 
