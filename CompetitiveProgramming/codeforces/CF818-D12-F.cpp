@@ -1,5 +1,6 @@
 /*
-Binary search on the 
+Binary search on the maximum number of edges we add so that
+the no. of bridges is atleast half of the edges.
 */
 #include<bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
