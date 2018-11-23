@@ -1,3 +1,8 @@
+"""
+Math problem: count the number of ways to put 2 queens in a chessboard so that they don't
+attack each other. Limits n <= 1e10
+Solved with AP sum formula and series sum formulas of sum of squares.
+"""
 from __future__ import division, print_function
 import itertools
 import sys
