@@ -1,5 +1,10 @@
+/*
+I stored all the edges in the complete graph of n vertices.
+then randomly shuffle it for each step, and add edges until
+the graph gets connected. Finally, take the average of all the
+answers, and return the answer.
+*/
 #include <bits/stdc++.h>
-
 using namespace std;
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 int randint(int a, int b) {
