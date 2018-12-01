@@ -1,3 +1,4 @@
+#!/home/deadpool/anaconda3/bin/python
 import urllib
 import json
 import sys
@@ -18,8 +19,8 @@ DOWNLOAD_DIR = '.'
 SUBMISSION_URL = 'http://codeforces.com/contest/{ContestId}/submission/{SubmissionId}'
 USER_INFO_URL = 'http://codeforces.com/api/user.status?handle={handle}&from=1&count={count}'
 
-EXT = {'C++': 'cpp', 'Python 3': 'py', 
-       'PyPy 3': 'py', 'PyPy': 'py', 
+EXT = {'C++': 'cpp', 'Python 3': 'py',
+       'PyPy 3': 'py', 'PyPy': 'py',
        'Python': 'py', 'C': 'c', 'Java': 'java',}
 
 replacer = {'&quot;': '\"', '&gt;': '>', '&lt;': '<', '&amp;': '&', "&apos;": "'"}
@@ -60,14 +61,14 @@ for submission in submissions:
     con_id, sub_id = submission['contestId'], submission['id'],
     prob_name, prob_id = submission['problem']['name'], submission['problem']['index']
     comp_lang = submission['programmingLanguage']
-    
+
     ext = get_ext(comp_lang)
     prob_name = prob_name.replace(" ", "_")
     file_name = "{:04d}{}_({}).{}".format(con_id, prob_id, prob_name, ext)
     if os.path.exists(file_name):
         print("[INFO] already have {}".format(file_name))
         continue
-    
+
     submission_full_url = SUBMISSION_URL.format(ContestId=con_id, SubmissionId=sub_id)
     print("Fetching submission:", submission_full_url)
     submission_info = urllib.request.urlopen(submission_full_url).read()
@@ -77,7 +78,7 @@ for submission in submissions:
         print("Could not fetch solution", sub_id)
         continue
     result = submission_text.text.replace('\r', '')
-    if ext == "txt": 
+    if ext == "txt":
         print(comp_lang, "language extension not found")
     file = open(file_name, 'w')
     file.write(result)
