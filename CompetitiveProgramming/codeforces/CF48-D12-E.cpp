@@ -6,7 +6,7 @@ is 0, for draw
 initially (0, 0) is winning state
 update all the winning states by a single bfs
 to update all losing states, for each 0 state, keep checking if it can
-be a losing state, until no more such states are left.
+be a losing state, until no more such states are left
 */
 #include<bits/stdc++.h>
 using namespace std;
