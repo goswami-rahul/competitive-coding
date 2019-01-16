@@ -1,5 +1,7 @@
 /*
- * 
+ * for every repeated x coordinates, count their number and multiply
+ * the number of ways that they can be arranged to the answer.
+ * for duplicates, divide by 2 for each duplicate.
  */
 
 #include<bits/stdc++.h>
