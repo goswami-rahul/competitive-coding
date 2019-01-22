@@ -1,3 +1,14 @@
+/*
+ * Maintain cumulative cost to reach each vertex from root; then
+ * time available for eating cookies is exactly T - 2 * cost, at each vertex
+ * Now check how many cookies you can eat in this available time;
+ * to do this, maintain fenwick trees currently holding total
+ * times to eat cookies in increasing order of time taken to eat a single cookie
+ * Take greedily the cookies which take least time, and update the return
+ * value always with the 2nd best answer from its children;
+ * except at the root, at which return the maximum of its children;
+ */ 
+
 #pragma GCC optimize("O3")
 #include<bits/stdc++.h>
 using namespace std;
