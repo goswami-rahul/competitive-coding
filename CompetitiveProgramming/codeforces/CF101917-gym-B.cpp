@@ -6,7 +6,7 @@
  * this time considering second element and iterate over this order.
  * Also maintain a set of smallest k items considering third element
  * and update the answer for each iteration.
- * Total Time Complexity - O(n ^ 2 log n) 
+ * Total Time Complexity  - O(n ^ 2 log n) 
 */
 #include<bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
