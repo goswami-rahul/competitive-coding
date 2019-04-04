@@ -28,3 +28,11 @@ inline int ncr(int n, int r) {
     if (n < r) return 0;
     return mul(fac[n], mul(ifac[n - r], ifac[r]));
 }
+void init_fac(int nax = 1e6 + 10) {
+    fac.resize(nax);
+    ifac.resize(nax);
+    fac[0] = 1;
+    for (int i = 1; i < nax; ++i) fac[i] = mul(i, fac[i - 1]);
+    ifac[nax - 1] = inv(fac[nax - 1]);
+    for (int i = nax - 1; i > 0; --i) ifac[i - 1] = mul(i, ifac[i]);
+}
