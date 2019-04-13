@@ -4,7 +4,7 @@ struct DSU {
         par.resize(n + 1);
         iota(par.begin(), par.end(), 0);
     }
-    inline int find (int u) {
+    inline int find(int u) {
         return (u == par[u] ? u : par[u] = find(par[u]));
     }
     inline bool merge(int u, int v) {

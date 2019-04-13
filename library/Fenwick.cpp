@@ -33,16 +33,33 @@ template <class T>
 struct Fenwick {
     int n;
     vector<T> bit;
-	Fenwick(int n): n(n), bit(n + 1, 0) {}
-	T qry(int x) {
-		T ans = 0;
-		for(; x > 0; x -= x & -x)
-			ans += bit[x];
-		return ans;
-	}
-	void upd(int x, T v) {
-		if(x <= 0) return;
-		for(; x <= n; x += x & -x)
-            bit[x] += v;
+    Fenwick(int _n): n(_n), bit(n + 1, 0) {};
+    Fenwick(int _n, int inival): n(_n), bit(n + 1, 0) {
+      for (int i = 1; i <= n; ++i)
+        add(i, inival);
+    }
+    T ask(int R) {
+        T ans = 0;
+        for(int x = R; x > 0; x -= x & -x)
+            ans += bit[x];
+        return ans;
+    }
+    T ask(int L, int R) {
+        return ask(R) - ask(L - 1);
+    }
+    T at(int pos) {
+      return ask(pos, pos);
+    }
+    void add(int pos, T v) {
+        if(pos <= 0) return;
+        for(; pos <= n; pos += pos & -pos)
+            bit[pos] += v;
+    }
+    vector<T> values(int upto = -1) {
+        if (upto == -1) return values(n);
+        vector<T> fenwick_values;
+        for (int i = 1; i <= upto; ++i)
+            fenwick_values.push_back(ask(i, i));
+        return fenwick_values;
     }
 };
