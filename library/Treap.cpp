@@ -8,10 +8,10 @@ struct Treap {
 
   NodePtr root;
   Treap() = default;
-  Treap(const string& str) {
-    root = create(str, 0, (int) str.size() - 1);
+  Treap(const vector<int>& a) {
+    root = create(a, 0, (int) a.size() - 1);
   }
-  NodePtr create(const string& a, int st, int en) {
+  NodePtr create(const vector<int>& a, int st, int en) {
     if (st > en) { return nullptr; }
     int md = (st + en) >> 1;
     NodePtr node(new Node(a[md]));
@@ -21,7 +21,7 @@ struct Treap {
     pull(node);
     return node;
   }
-  char at(int pos) {
+  int at(int pos) {
     NodePtr node = find(root, pos);
     assert(node != nullptr);
     return node->val;
@@ -33,21 +33,24 @@ struct Treap {
     range->flip ^= true;
     root = meld(meld(aux1, range), aux2);
   }
-  void insert(int pos, char val) {
+  void insert(int pos, int val) {
     NodePtr aux1, aux2;
     split(root, pos, aux1, aux2);
     root = meld(meld(aux1, NodePtr(new Node(val))), aux2);
   }
+  int erase(int pos) {
+    return erase(root, pos)->val;
+  }
   
   /***************************[HELPERS]*********************************/
   struct Node {
-    char val;
+    int val;
     int priority;
     int size;
     bool flip;
     NodePtr lch, rch;
     Node() = default;
-    Node(char _val): val(_val) {
+    Node(int _val): val(_val) {
       size = 1;
       flip = false;
       priority = gen(rng32);
@@ -82,15 +85,28 @@ struct Treap {
     if (node == nullptr) return nullptr;
     push(node);
     int cur_key = size(node->lch) + offset;
-    if (key == cur_key) return node;
+    if (key == cur_key) { pull(node); return node; }
     if (key < cur_key) return find(node->lch, key, offset);
     else return find(node->rch, key, cur_key + 1);
   }
-  static void split(const NodePtr node, int key, NodePtr& L, NodePtr& R, int offset = 0) {
-    if (node == nullptr) {
-      L = nullptr; R = nullptr;
-      return;
+  static NodePtr erase(NodePtr &node, int key, int offset = 0) {
+    assert (node != nullptr);
+    push(node);
+    int cur_key = size(node->lch) + offset;
+    NodePtr deleted;
+    if (key == cur_key) {
+      deleted = node;
+      node = meld(node->lch, node->rch);
+    } else if (key < cur_key) {
+      deleted = erase(node->lch, key, offset); }
+    else if (key > cur_key) {
+      deleted = erase(node->rch, key, cur_key + 1);
     }
+    pull(node);
+    return deleted;
+  }
+  static void split(const NodePtr node, int key, NodePtr& L, NodePtr& R, int offset = 0) {
+    if (node == nullptr) { L = R = nullptr; return; }
     push(node);
     int cur_key = size(node->lch) + offset;
     if (key <= cur_key) {
@@ -107,37 +123,58 @@ struct Treap {
     if (R == nullptr) return L;
     NodePtr node;
     if (L->priority > R->priority) {
-      push(L);
-      node = L;
+      push(L); node = L;
       node->rch = meld(L->rch, R);
     } else {
-      push(R);
-      node = R;
+      push(R); node = R;
       node->lch = meld(L, R->lch);
     }
     pull(node);
     return node;
   }
+
+  friend void debug(const NodePtr& node, ostream& os = std::cerr) {
+    if (node == nullptr) { return; }
+    //~ push(node);
+    debug(node->lch);
+    os << *node << ' ';
+    debug(node->rch);
+  }
+  friend ostream& operator << (ostream& os, Node g) {
+    return os << g.val;
+  }
+  friend ostream& operator << (ostream& os, NodePtr g) {
+    debug(g, os); return os;
+  }
+  friend ostream& operator << (ostream& os, const Treap& g) {
+    return os << g.root;
+  }
   /***************************[/HELPERS]*****************************/
 };
 
-// For Debug
-void debug(const NodePtr& node) {
-  if (node == nullptr) { return; }
-  push(node);
-  debug(node->lch);
-  cerr << *node << ' ';
-  debug(node->rch);
-  pull(node);
-}
-ostream& operator << (ostream& os, Node g) {
-  //~ return os << "<" << g.val << ", " << g.priority << ", "
-  //~ << g.size << ">";
-  return os << g.val;
-}
-ostream& operator << (ostream& os, NodePtr g) {
-  debug(g); return os;
-}
-ostream& operator << (ostream& os, const Treap& g) {
-  return os << g.root;
+signed main() {
+
+  ios_base::sync_with_stdio(false);
+  cin.tie(nullptr);
+
+  int n, q, m;
+  cin >> n >> q >> m;
+  vector<int> a(n);
+  for (int &x: a) cin >> x;
+  Treap treap(a);
+  for (int i = 0; i < q; ++i) {
+    int t, x, y;
+    cin >> t >> x >> y; --x; --y;
+    if (t == 1) {
+      treap.insert(x, treap.erase(y));
+    } else {
+      treap.reverse(x, y);
+    }
+  }
+  for (int i = 0; i < m; ++i) {
+    int x; cin >> x; --x;
+    cout << treap.at(x) << ' ';
+  }
+
+  return 0;
 }
