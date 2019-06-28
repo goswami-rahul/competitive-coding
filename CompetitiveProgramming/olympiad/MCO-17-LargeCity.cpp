@@ -1,4 +1,4 @@
-/*
+/* https://codeforces.com/group/R2SERIff4f/contest/213171/problem/J
  * maintain an array of ranges/segments which are reachable for the
  * current row. Now move to the next row which contains any blocking cell.
  * If there are 1 or more rows in between, change the segment and add
