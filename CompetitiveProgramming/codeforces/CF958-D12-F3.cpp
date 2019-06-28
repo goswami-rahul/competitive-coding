@@ -1,3 +1,11 @@
+/**
+ * The solution is same as the editorial http://dj3500.webfactional.com/hc2-2018-editorial.pdf 
+ * For each element, find its frequency f, and consider a polynomial 1 + x + x^2 ... + x^f
+ * Multiplying these polynomials, the answer is the coeffcient of x^k in the result.
+ * To multiply the polynomials fast enough, multiply them in by succesively multiplying
+ * the smallest two polynomials.
+**/ 
+
 #include <bits/stdc++.h>
 using namespace std;
 #define SZ(v) int((v).size())
