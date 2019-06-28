@@ -1,3 +1,12 @@
+/**
+ * After some analysis, we find that answer is of the form:
+ * Let f(i) = (i^n - (i - 1)^n) * (i^m - (i - 1)^m)
+ * Then answer = sum_{i=1...p} {f(i)} 
+ * To calculate is faster for a large p, we notice that the answer is
+ * of the form of a polynomial of degree d = max(n * 2, m * 2)
+ * So, we use Lagrange's interpolation, generating d + 1 values at i=1...d+1
+ * And, then calculate answer for larger p in O(max(n, m))
+**/
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long i64;

@@ -1,3 +1,10 @@
+/**
+ * For each pair of characters, check if match together in each substring.
+ * For this, use convolution using FFT.
+ * Now, consider a graph with 6 vertices (no. of characters) and 
+ * connect an edge between the pairs that matched.
+ * The answer depends on the number of connected components of the graph.
+**/
 #include <bits/stdc++.h>
 using namespace std;
 #define SZ(v) int((v).size())
@@ -21,52 +28,140 @@ DefOut(vector) DefOut(set) DefOut(multiset) DefOut2(map)
 template<typename T,typename... Args> void err(istream_iterator<string> it, T a, Args... args) {
   cerr << *it << " =: " << a << endl; err(++it, args...); }
 template<typename T> void kek(T ans) {cout << ans << endl; exit(0);}
-int const MOD = 1e9 + 7;
+int const MOD = 1000000007;
 long long const INF = 1e18;
 /***********************************************************************/
-#define int i64
-const int nax = 105;
-int dp[nax][28][nax];
+namespace FFT {
+  typedef double num_t;
+  struct Complex {
+    num_t real, imag;
+    Complex() = default;
+    Complex(const num_t x, const num_t y = 0): real(x), imag(y) {}
+    
+    Complex& operator *= (const Complex &rhs) {
+      const num_t temp = real * rhs.real - imag * rhs.imag;
+      imag = real * rhs.imag + imag * rhs.real; real = temp;
+      return *this;
+    }
+    friend Complex operator * (Complex lhs, const Complex &rhs) {
+      lhs *= rhs; return lhs;
+    }
+    Complex& operator += (const Complex &rhs) {
+      real += rhs.real, imag += rhs.imag; return *this;
+    }
+    friend Complex operator + (Complex lhs, const Complex &rhs) {
+      lhs += rhs; return lhs;
+    }
+    Complex& operator -= (const Complex &rhs) {
+      real -= rhs.real, imag -= rhs.imag; return *this;
+    }
+    friend Complex operator - (Complex lhs, const Complex &rhs) {
+      lhs -= rhs; return lhs;
+    }
+    Complex& operator /= (const num_t &rhs) {
+      real /= rhs, imag /= rhs; return *this;
+    }
+  };
+  
+  const num_t PI = acos(-1);
+  const int MAX = 1 << 18;
+  static int bits[MAX];
+  static Complex root[MAX], iroot[MAX];
+  
+  inline void prepare_roots() {
+    root[1] = iroot[1] = 1;
+    for (int len = 2; len < MAX; len *= 2) {
+      const Complex w(cos(PI / len), sin(PI / len)), iw(cos(PI / len), -sin(PI / len));
+      for (int i = len >> 1; i < len; ++i) {
+        root[i + i] = root[i]; root[i + i + 1] = root[i] * w;
+        iroot[i + i] = iroot[i]; iroot[i + i + 1] = iroot[i] * iw;
+      }
+    }
+  }
+  inline void prepare_cache(int n) {
+    static int last = -1;
+    if (last == n) return; last = n;
+    int lg = 0;
+    while (1 << (lg + 1) < n) ++lg;
+    for (int i = 1; i < n; ++i) 
+      bits[i] = (bits[i >> 1] >> 1) | ((i & 1) << lg);
+  }
+  
+  void fft(vector<Complex> &a, bool invert) {
+    int n = (int) a.size();
+    if (n == 1) return;
+    for (int i = 1; i < n; i++) if (i > bits[i]) swap(a[i], a[bits[i]]);
+    const auto ws = (invert ? iroot : root); 
+    for (int len = 1; len < n; len *= 2) {
+      for (int i = 0; i < n; i += len << 1) {
+        for (int j = 0; j < len; j++) {
+          const Complex v = a[i + j + len] * ws[len + j];
+          a[i + j + len] = a[i + j] - v; a[i + j] += v;
+        }
+      }
+    }
+    if (invert) for (Complex &x: a) x /= n;
+  }
+  vector<int> multiply(vector<int> const &a, vector<int> const &b) {
+    vector<Complex> fa(a.begin(), a.end()), fb(b.begin(), b.end());
+    int n = 1;
+    while (n < (int) (a.size() + b.size())) n <<= 1;
+    fa.resize(n); fb.resize(n);
+    
+    prepare_cache(n);
+    fft(fa, false); fft(fb, false);
+    for (int i = 0; i < n; i++) fa[i] *= fb[i];
+    fft(fa, true);
+
+    vector<int> result(n);
+    for (int i = 0; i < n; i++) result[i] = (int) round(fa[i].real);
+    return result;
+  }
+} // namespace FFT
+
+
 int32_t main() {
 
   ios_base::sync_with_stdio(false);
   cin.tie(nullptr);
 
-  int n, k;
-  cin >> n >> k;
-  string s;
-  cin >> s;
-  dp[0][26][0] = 1;
-  const int LIM = 1e12 + 42;
-  int best = INF;
-  for (int i = 1; i <= n; ++i) {
-    for (int j = 0; j <= 26; ++j) {
-      for (int p = 0; p <= n; ++p) {
-        dp[i][j][p] = dp[i - 1][j][p];
-      }
+  FFT::prepare_roots();
+  string s, t; cin >> s >> t;
+  int n = SZ(s), m = SZ(t);
+  reverse(ALL(t));
+  vector<vector<vector<int>>> poly(6, vector<vector<int>>(6));
+  for (int i = 0; i < 6; ++i) {
+    for (int j = 0; j < 6; ++j) if (i != j) {
+      vector<int> a, b;
+      for (int k = 0; k < n; ++k) a.push_back(s[k] - 'a' == i);
+      for (int k = 0; k < m; ++k) b.push_back(t[k] - 'a' == j);
+      poly[i][j] = FFT::multiply(a, b);
     }
-    for (int p = 1; p <= n; ++p) {
-      dp[i][s[i - 1] - 'a'][p] = 0;
-      for (int u = 0; u <= 26; ++u) {
-        dp[i][s[i - 1] - 'a'][p] += dp[i - 1][u][p - 1];
-      }
-    }
-    vector<int> b(n + 1, 0);
-    for (int j = 0; j <= 26; ++j) {
-      for (int p = 0; p <= n; ++p) {
-        uin(dp[i][j][p], LIM);
-        b[p] += dp[i][j][p];
-      }
-    }
-    int need = k, cost = 0;
-    for (int j = n; ~j; --j) {
-      int take = min(need, b[j]);
-      need -= take;
-      cost += take * (n - j);
-    }
-    if (need == 0) uin(best, cost);
   }
-  kek(best == INF ? -1 : best);
+  for (int i = m - 1; i < n; ++i) {
+    vector<vector<int>> g(6);
+    for (int x = 0; x < 6; ++x) {
+      for (int y = 0; y < 6; ++y) if (x != y && poly[x][y][i] > 0) {
+        g[x].push_back(y);
+        g[y].push_back(x);
+      }
+    }
+    vector<bool> see(6, false);
+    function<int(int)> dfs = [&] (int u) {
+      see[u] = true;
+      int size = 1;
+      for (int v: g[u]) if (!see[v]) {
+        size += dfs(v);
+      }
+      return size;
+    };
+    int ans = 0;
+    for (int u = 0; u < 6; ++u) if (!see[u]) {
+      ans += dfs(u) - 1;
+    }
+    cout << ans << ' ';
+  }
+  cout << '\n';;
   
   return 0;
 }

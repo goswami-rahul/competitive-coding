@@ -1,3 +1,9 @@
+/**
+ * dp[i][j][k] counts the no. of unique subsequences till  first i characters
+ * ending with j, and of length k
+ * Maintain, dp within a limit (1e12) to avoid overflow.
+ * Take the strings in the set greedily from highest length to lowest length.
+**/
 #include <bits/stdc++.h>
 using namespace std;
 #define SZ(v) int((v).size())
