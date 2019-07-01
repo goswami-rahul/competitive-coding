@@ -106,7 +106,7 @@ struct Treap {
     return deleted;
   }
   static void split(const NodePtr node, int key, NodePtr& L, NodePtr& R, int offset = 0) {
-    if (node == nullptr) { L = R = nullptr; return; }
+    if (node == nullptr) { return void(L = R = nullptr); }
     push(node);
     int cur_key = size(node->lch) + offset;
     if (key <= cur_key) {

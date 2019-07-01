@@ -22,14 +22,13 @@ struct xorshift {
 
 /******************/
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-int randint(int a, int b) {
-    return uniform_int_distribution<int>(a, b)(rng);
+inline int randint(int a, int b) {
+  return uniform_int_distribution<int>(a, b)(rng);
 }
-auto gettime() {
-    return std::chrono::high_resolution_clock::now();
+inline auto gettime() {
+  return std::chrono::high_resolution_clock::now();
 }
-int duration(auto d) {
-    // time from d till now (in milliseconds)
-    return (int) std::chrono::duration_cast<std::chrono::milliseconds>(gettime() - d).count();
+inline int duration(auto d) {
+  // time from d till now (in milliseconds)
+  return (int) std::chrono::duration_cast<std::chrono::milliseconds>(gettime() - d).count();
 }
-int main()

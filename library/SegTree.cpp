@@ -1,14 +1,14 @@
 struct Node {
-  i64 sum, lza, lzd;
-  Node(): sum(), lza(), lzd() {};
+  i64 minv, lz;
+  Node(): minv(), lz() {}
   friend Node operator + (const Node &lhs, const Node &rhs) {
     Node node;
-    node.sum = lhs.sum + rhs.sum;
+    node.minv = min(lhs.minv, rhs.minv);
     return node;
-  };
-  friend ostream &operator << (ostream &os, const Node &p) {
-    return os << "<" << p.sum << ", " << p.lza << ", " << p.lzd << ">";
   }
+  //~ friend ostream &operator << (ostream &os, const Node &p) {
+    //~ return os << "<" << p.minv << ", " << p.lz << ">";
+  //~ }
 };
 struct SegTree {
   #define li (i + i)
@@ -31,39 +31,24 @@ struct SegTree {
     debug(li); debug(ri);
   }
   inline void push(int i) {
-    i64 &lza = t[i].lza, &lzd = t[i].lzd;
-    if (lza == 0 && lzd == 0) { return; }
+    i64 &lz = t[i].lz;
+    if (lz == 0) { return; }
     i64 len = ee[i] - ss[i] + 1;
-    t[i].sum += len * lza + lzd * (len * (len - 1) / 2);
+    t[i].minv += lz;
     if (len > 1) {
-      t[li].lza += lza;
-      t[li].lzd += lzd;
-      t[ri].lza += lza + lzd * (ee[li] - ss[li] + 1);
-      t[ri].lzd += lzd;
+      t[li].lz += lz;
+      t[ri].lz += lz;
     }
-    lza = lzd = 0;
+    lz = 0;
   }
   inline void update(int i, int us, int ue, i64 a) {
-    // range
     if (us <= ss[i] && ee[i] <= ue) {
-      t[i].lza += a;
-      t[i].lzd++;
+      t[i].lz += a;
       push(i); return;
     }
     push(i);
     if (ue < ss[i] || ee[i] < us) { return; }
-    i64 b = a + (ee[li] - max(us, ss[i]) + 1);
-    if (us > ee[li]) b = a;
-    update(li, us, ue, a); update(ri, us, ue, b);
-    t[i] = t[li] + t[ri];
-  }
-  inline void update(int i, int pos, int val, int id) {
-    // point
-    if (ss[i] == ee[i]) {
-      //~ assert (ss[i] == pos);
-      return;
-    }
-    update((pos <= ee[li] ? li : ri), pos, val, id);
+    update(li, us, ue, a); update(ri, us, ue, a);
     t[i] = t[li] + t[ri];
   }
   inline Node ask(int i, int qs, int qe) {
@@ -74,11 +59,11 @@ struct SegTree {
     return ask(li, qs, ee[li]) +
       ask(ri, ss[ri], qe);
   }
-  void update(int L, int R) {
-    return update(1, L, R, 1);
+  void update(int L, int R, i64 val) {
+    return update(1, L, R, val);
   }
   i64 ask(int L, int R) {
-    return ask(1, L, R).sum;
+    return ask(1, L, R).minv;
   }
   #undef li
   #undef ri
