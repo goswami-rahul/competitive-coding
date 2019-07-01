@@ -1,0 +1,70 @@
+import sys
+sys.setrecursionlimit(2001)
+def debug(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+
+class Node:
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+def solve():
+    nodes = {}
+    def preorder(val, arr):
+        if val == 0:
+            return
+        arr.append(val)
+        preorder(nodes[val].left, arr)
+        preorder(nodes[val].right, arr)
+
+    def postorder(val, arr):
+        if val == 0:
+            return
+        postorder(nodes[val].left, arr)
+        postorder(nodes[val].right, arr)
+        arr.append(val)
+
+    n, k = map(int, input().split())
+    for i in range(1, n + 1):
+        a, b = map(int, input().split())
+        nodes[i] = Node(a, b)
+    pre = []
+    post = []
+    preorder(1, pre)
+    postorder(1, post)
+
+    M = {}
+    for pr, ps in zip(pre, post):
+        M[pr] = ps
+    s = set(range(1, n + 1))
+    A = []
+    while s:
+        e = s.pop()
+        x = e
+        tempset = {e}
+        while M[x] != e:
+            x = M[x]
+            assert x not in tempset
+            tempset.add(x)
+            s.remove(x)
+        A.append(tempset)
+    debug(A)
+    if k > len(A):
+        print("Impossible")
+        debug(f"k > len(A) ({k} > {len(A)})")
+        return
+    L = len(A)
+    ans = [-1] * n
+    for i in range(L):
+        ii = i + 1
+        if ii > k:
+            ii = 1
+        for e in A[i]:
+            ans[e - 1] = ii
+    print(*ans)
+
+for T in range(int(input())):
+    print(f"Case #{T+1}:", end=" ")
+    solve()
+    debug(f"Case #{T+1} solved!\n")
+    # break
