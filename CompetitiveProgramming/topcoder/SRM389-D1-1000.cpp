@@ -71,10 +71,3 @@ public:
   }
   */
 };
-
-int main() {
-  LittleSquares sol;
-  sol.memo.assign(11, -1);
-  for (int i = 0; i <= 10; ++i) sol.grundy(i);
-  for (int x: sol.memo) cout << x << ", ";
-}
