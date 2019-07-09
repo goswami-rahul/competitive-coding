@@ -1,4 +1,11 @@
-
+/**
+ * Consider a game of state as dp[n][b],
+ * dp[n][0]: 2xn space with no extra space
+ * dp[n][1]: 2xn space with 1 square extra space on one side
+ * dp[n][2]: 2xn space with 1 square extra spaces on both sides
+ * Calculate grundy of state [N][0] for the the grundy of the game,
+ * by taking mex of the staes reachable from current state.
+**/
 #include <bits/stdc++.h>
 using namespace std;
 #define SZ(v) int((v).size())
