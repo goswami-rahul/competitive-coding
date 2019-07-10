@@ -10,11 +10,11 @@ struct Edge {
   int u, v;
   flow_t cap, flow;
 };
-static Edge edges[MAXE];
-static vector<int> adj[MAXN];
-static int lev[MAXN];
-static int ptr[MAXN];
-static int que[MAXN];
+Edge edges[MAXE];
+vector<int> adj[MAXN];
+int lev[MAXN];
+int ptr[MAXN];
+int que[MAXN];
 int N = MAXN, E = 0;
 int source, sink;
 
@@ -69,6 +69,7 @@ inline void set_edge(int u, int v, flow_t cap = 1) /*directed edge*/ {
   adj[v].push_back(E);
   edges[E++] = {v, u, 0, 0};
 }
+
 } // namespace Dinic
 
 /*****************************************************/
