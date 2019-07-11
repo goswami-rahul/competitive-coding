@@ -1,10 +1,14 @@
 namespace Dinic {
   
 typedef int flow_t;
-const int MAXN = 10010;
-const int MAXE = MAXN << 3;
+const int MAXN = 1000;
+const int MAXE = MAXN * MAXN;
 const flow_t INF = 2e9;
 const flow_t EPS = 1;
+
+const bool SCALING = true;
+flow_t MAXCAP = 1000;
+flow_t LIM = SCALING ? MAXCAP : EPS;
 
 struct Edge {
   int u, v;
@@ -25,7 +29,7 @@ bool bfs() {
   while (fp < bp) {
     int u = que[fp++];
     for (const int id : adj[u]) {
-      if (edges[id].cap - edges[id].flow < EPS) continue;
+      if (edges[id].cap - edges[id].flow < LIM) continue;
       if (lev[edges[id].v] != -1) continue;
       lev[edges[id].v] = lev[u] + 1;
       que[bp++] = edges[id].v;
@@ -40,7 +44,7 @@ flow_t dfs(int u, flow_t pushed) {
     int id = adj[u][cid];
     int v = edges[id].v;
     if (lev[u] + 1 != lev[v]) continue;
-    if (edges[id].cap - edges[id].flow < EPS) continue;
+    if (edges[id].cap - edges[id].flow < LIM) continue;
     flow_t flow = dfs(v, min(pushed, edges[id].cap - edges[id].flow));
     if (flow == 0) continue;
     edges[id].flow += flow;
@@ -52,15 +56,17 @@ flow_t dfs(int u, flow_t pushed) {
 flow_t max_flow(int s, int t) {
   source = s, sink = t;
   flow_t flow = 0, pushed;
-  while (bfs()) {
-    fill(ptr, ptr + N, 0);
-    while ((pushed = dfs(source, INF)) >= EPS) 
-      flow += pushed;
+  for (; LIM >= EPS; LIM >>= 1) {
+    while (bfs()) {
+      fill(ptr, ptr + N, 0);
+      while ((pushed = dfs(source, INF)) >= EPS) 
+        flow += pushed;
+    }
   }
   return flow;
 }
-inline void reset(int n = MAXN) {
-  N = n; E = 0;
+inline void reset(int n = MAXN, int maxcap = MAXCAP) {
+  N = n; E = 0; LIM = SCALING ? maxcap : EPS;
   for (int i = 0; i < N; ++i) adj[i].clear();
 }
 inline void set_edge(int u, int v, flow_t cap = 1) /*directed edge*/ {
