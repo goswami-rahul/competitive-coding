@@ -1,14 +1,12 @@
 namespace Dinic {
   
 typedef int flow_t;
-const int MAXN = 1000;
-const int MAXE = MAXN * MAXN;
+const int MAXN = 256;
+const int MAXE = 1024;
 const flow_t INF = 2e9;
 const flow_t EPS = 1;
 
-const bool SCALING = true;
-flow_t MAXCAP = 1000;
-flow_t LIM = SCALING ? MAXCAP : EPS;
+flow_t LIM = EPS;
 
 struct Edge {
   int u, v;
@@ -53,10 +51,11 @@ flow_t dfs(int u, flow_t pushed) {
   }
   return 0;
 }
-flow_t max_flow(int s, int t) {
+// scale = max capacity edge if scaling else default
+flow_t max_flow(int s, int t, int scale = EPS) {
   source = s, sink = t;
   flow_t flow = 0, pushed;
-  for (; LIM >= EPS; LIM >>= 1) {
+  for (LIM = scale; LIM >= EPS; LIM >>= 1) {
     while (bfs()) {
       fill(ptr, ptr + N, 0);
       while ((pushed = dfs(source, INF)) >= EPS) 
@@ -65,8 +64,8 @@ flow_t max_flow(int s, int t) {
   }
   return flow;
 }
-inline void reset(int n = MAXN, int maxcap = MAXCAP) {
-  N = n; E = 0; LIM = SCALING ? maxcap : EPS;
+inline void reset(int n = MAXN) {
+  N = n; E = 0;
   for (int i = 0; i < N; ++i) adj[i].clear();
 }
 inline void set_edge(int u, int v, flow_t cap = 1) /*directed edge*/ {
