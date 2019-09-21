@@ -119,3 +119,35 @@ struct SegTree {
   #undef li
   #undef ri
 };
+
+
+struct SegTree {
+  #define li (i + i)
+  #define ri (i + i + 1)
+  vector<vector<i64>> t, p;
+  vector<int> ss, ee;
+  SegTree(int n, vector<int> &arr): t(n << 2), p(n << 2), ss(n << 2), ee(n << 2) {
+    build(1, 0, n - 1, arr);
+  }
+  void build(int i, int l, int r, vector<int> &arr) {
+    ss[i] = l, ee[i] = r;
+    if (l == r) { t[i] = {arr[l]}; p[i] = t[i]; return; }
+    int m = (l + r) >> 1;
+    build(li, l, m, arr); build(ri, m + 1, r, arr);
+    merge(ALL(t[li]), ALL(t[ri]), back_inserter(t[i]));
+    p[i] = t[i];
+    for (int j = 1; j < SZ(p[i]); ++j) {
+      p[i][j] += p[i][j - 1];
+    }
+  }
+  i64 ask(int i, int l, int r, int x) {
+    if (ee[i] < l || r < ss[i]) return 0LL;
+    if (l <= ss[i] && ee[i] <= r) {
+      int u = (int) (upper_bound(ALL(t[i]), x) - begin(t[i]));
+      return u > 0 ? p[i][u - 1] : 0LL;
+    }
+    return ask(li, l, r, x) + ask(ri, l, r, x);
+  }
+  #undef li
+  #undef ri
+};

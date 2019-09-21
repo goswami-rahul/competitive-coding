@@ -25,7 +25,7 @@ inline void adds(int &a, int b, int mod = MOD) {
   a += b; if (a >= mod) a -= mod;
 }
 inline void subs(int &a, int b, int mod = MOD) {
-  a -= b; if (a < mod) a += mod;
+  a -= b; if (a < 0) a += mod;
 }
 inline void muls(int &a, int b, int mod = MOD) {
   a = int((long long) a * b % mod);
@@ -35,7 +35,7 @@ inline void mdivs(int &a, int b, int mod = MOD) {
 }
 vector<int> fac, ifac;
 inline int ncr(int n, int r) {
-  if (n < r || r < 0) return 0;
+  if (n < r || r < 0 || n < 0) return 0;
   return mul(fac[n], mul(ifac[n - r], ifac[r]));
 }
 void prepare_factorial(int nax = 1e6 + 10) {

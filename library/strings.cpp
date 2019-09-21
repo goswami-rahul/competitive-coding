@@ -79,3 +79,40 @@ auto ask_lcp = [&] (int L, int R) {
   }
   return res;
 };
+
+struct StringHash {
+  static array<int,2> mods;
+  static const int base;
+  static vector<array<int,2>> base_pows, base_invs;
+  vector<array<int,2>> pref;
+  StringHash(const string &s): pref(s.size() + 1) {
+    for (int i = 0; i < (int) s.size(); ++i) {
+      for (int j = 0; j < 2; ++j) {
+        pref[i + 1][j] = add(pref[i][j], mul(s[i] - 'a' + 1, base_pows[i][j], mods[j]), mods[j]);
+      }
+    }
+  }
+  auto get_hash(int i, int j) {
+    array<int,2> res;
+    for (int k = 0; k < 2; ++k) {
+      res[k] = mul(base_invs[i][k], sub(pref[j + 1][k], pref[i][k], mods[k]), mods[k]);
+    }
+    return res;
+  }
+  static void prepare(int n) {
+    mods = {(int) 1e9 + 7, (int) 1e9 + 9};
+    base_pows.resize(n);
+    base_invs.resize(n);
+    for (int k = 0; k < 2; ++k) {
+      base_pows[0][k] = base_invs[0][k] = 1;
+      const int binv = inv(base, mods[k]);
+      for (int i = 1; i < n; ++i) {
+        base_pows[i][k] = mul(base, base_pows[i - 1][k], mods[k]);
+        base_invs[i][k] = mul(binv, base_invs[i - 1][k], mods[k]);
+      }
+    }
+  }
+};
+array<int,2> StringHash::mods;
+const int StringHash::base = 3;
+vector<array<int,2>> StringHash::base_pows, StringHash::base_invs;
