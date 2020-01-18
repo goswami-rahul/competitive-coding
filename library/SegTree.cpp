@@ -24,12 +24,6 @@ struct SegTree {
     int m = (l + r) >> 1;
     build(li, l, m); build(ri, m + 1, r);
   }
-  void debug(int i = 1) {
-    auto nn = make_pair(make_pair(ss[i], ee[i]), t[i]);
-    //~ error(nn);
-    if (ss[i] == ee[i]) { return; }
-    debug(li); debug(ri);
-  }
   inline void push(int i) {
     i64 &lz = t[i].lz;
     if (lz == 0) { return; }
@@ -67,87 +61,10 @@ struct SegTree {
   }
   #undef li
   #undef ri
-};
-
-struct Node {
-  set<pair<int,int>> a;
-  pair<int,int> mx;
-  Node(): mx({-1,-1}) {};
-};
-
-struct SegTree {
-  #define li (i + i)
-  #define ri (i + i + 1)
-  vector<int> ss, ee;
-  vector<Node> t;
-  SegTree(int n): ss(n << 2), ee(n << 2), t(n << 2) {
-    build(1, 1, n);
-  }
-  void build(int i, int l, int r) {
-    ss[i] = l, ee[i] = r;
-    if (l == r) { return; }
-    int m = (l + r) >> 1;
-    build(li, l, m); build(ri, m + 1, r);
-  }
-  inline void update(int i, int pos, int val, int id) {
-    if (ss[i] == ee[i]) {
-      assert (ss[i] == pos);
-      if (val == -1) {
-        t[i].a.erase(prev(t[i].a.end()));
-        t[i].mx = (t[i].a.empty() ? make_pair(-1, -1) : *t[i].a.rbegin());
-      } else {
-        t[i].a.emplace(val, id);
-        uax(t[i].mx, make_pair(val, id));
-      }
-      return;
-    }
-    update((pos <= ee[li] ? li : ri), pos, val, id);
-    t[i].mx = max(t[li].mx, t[ri].mx);
-  }
-  inline pair<int,int> ask(int i, int qs, int qe) {
-    if (qs == ss[i] && qe == ee[i]) { return t[i].mx; }
-    if (qe <= ee[li]) { return ask(li, qs, qe); }
-    if (qs >= ss[ri]) { return ask(ri, qs, qe); }
-    return max(ask(li, qs, ee[li]), ask(ri, ss[ri], qe));
-  }
-  void update(int pos, int val, int id) {
-    return update(1, pos, val, id);
-  }
-  int ask(int upto) {
-    return ask(1, 1, upto).second;
-  }
-  #undef li
-  #undef ri
-};
-
-
-struct SegTree {
-  #define li (i + i)
-  #define ri (i + i + 1)
-  vector<vector<i64>> t, p;
-  vector<int> ss, ee;
-  SegTree(int n, vector<int> &arr): t(n << 2), p(n << 2), ss(n << 2), ee(n << 2) {
-    build(1, 0, n - 1, arr);
-  }
-  void build(int i, int l, int r, vector<int> &arr) {
-    ss[i] = l, ee[i] = r;
-    if (l == r) { t[i] = {arr[l]}; p[i] = t[i]; return; }
-    int m = (l + r) >> 1;
-    build(li, l, m, arr); build(ri, m + 1, r, arr);
-    merge(ALL(t[li]), ALL(t[ri]), back_inserter(t[i]));
-    p[i] = t[i];
-    for (int j = 1; j < SZ(p[i]); ++j) {
-      p[i][j] += p[i][j - 1];
-    }
-  }
-  i64 ask(int i, int l, int r, int x) {
-    if (ee[i] < l || r < ss[i]) return 0LL;
-    if (l <= ss[i] && ee[i] <= r) {
-      int u = (int) (upper_bound(ALL(t[i]), x) - begin(t[i]));
-      return u > 0 ? p[i][u - 1] : 0LL;
-    }
-    return ask(li, l, r, x) + ask(ri, l, r, x);
-  }
-  #undef li
-  #undef ri
+  //~ void debug(int i = 1) {
+    //~ auto nn = make_pair(make_pair(ss[i], ee[i]), t[i]);
+    //~ error(nn);
+    //~ if (ss[i] == ee[i]) { return; }
+    //~ debug(li); debug(ri);
+  //~ }
 };
