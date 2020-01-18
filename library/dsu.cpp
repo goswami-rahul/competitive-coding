@@ -16,7 +16,7 @@ struct UF {
     if (u == v) return false;
     if (rand() % 2) swap(u, v);
     par[v] = u;
-    size[u] += size[v];
+    sizes[u] += sizes[v];
     cnt--;
     return true;
   }

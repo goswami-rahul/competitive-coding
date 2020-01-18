@@ -86,3 +86,72 @@ namespace FFT {
     return result;
   }
 } // namespace FFT
+
+
+/******************************/
+
+// faster to write
+namespace FFT {
+	using DBL = double; // !!! change to long double if needed
+	using cd = complex<DBL>;
+	const DBL PI = acos(-1);
+
+	int reverse(int num, int lg_n) {
+		int res = 0;
+		for (int i = 0; i < lg_n; ++i) {
+			if (num & (1 << i)) {
+				res |= 1 << (lg_n - 1 - i);
+			}
+		}
+		return res;
+	}
+
+	void fft(vector<cd>& a, bool invert) {
+		int n = a.size(); int lg_n = 0;
+		while ((1 << lg_n) < n) lg_n++;
+		for (int i = 0; i < n; ++i) {
+			if (i < reverse(i, lg_n)) {
+				swap(a[i], a[reverse(i, lg_n)]);
+			}
+		}
+		for (int len = 2; len <= n; len <<= 1) {
+		    DBL ang = 2 * PI / len * (invert ? -1 : 1);
+		    cd wlen(cos(ang), sin(ang));
+		    for (int i = 0; i < n; i += len) {
+		        cd w(1);
+		        for (int j = 0; j < len / 2; j++) {
+		            cd u = a[i+j], v = a[i+j+len/2] * w;
+		            a[i+j] = u + v;
+		            a[i+j+len/2] = u - v;
+		            w *= wlen;
+		        }
+		    }
+		}
+        if (invert) {
+            for (cd&x: a) {
+                x /= n;
+            }
+        }
+	}
+
+	void convolveSelf(vector<LL>& a) {
+        int m = a.size();
+	    int n = 1;
+	    while (n < m) n <<= 1;
+	    n <<= 1;
+        vector<cd> va(n, 0), ia(n, 0);
+        for (int i = 0; i < m; ++i) {
+            va[i] = a[i];
+            ia[i] = a[m - i - 1];
+        }
+        fft(va, false);
+        fft(ia, false);
+        for (int i = 0; i < n; ++i) {
+            va[i] *= ia[i];
+        }
+        fft(va, true);
+        for (int i = 0; i < m; ++i) {
+            a[i] = LL(round(va[m - 1 + i].real()));
+        }
+	}
+};
