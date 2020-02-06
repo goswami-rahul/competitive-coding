@@ -1,5 +1,84 @@
 mt19937 rng32(chrono::steady_clock::now().time_since_epoch().count());
 uniform_int_distribution<int32_t> gen(1, INT32_MAX - 1);
+ 
+struct Node;
+//~ typedef shared_ptr<Node> NodePtr;
+typedef Node* NodePtr;
+struct Node {
+  int key;
+  i64 val;
+  i64 sum;
+  i64 lazy;
+  int priority;
+  int size;
+  NodePtr lch, rch;
+  Node() = default;
+  Node(int k, int v): key(k), val(v), sum(v), lazy(0), priority(gen(rng32)), size(1), lch(0), rch(0) {}
+};
+void push(const NodePtr &node) {
+  if (!node or !node->lazy) return;
+  node->val += node->lazy;
+  node->sum += (i64) node->lazy * node->size;
+  if (node->lch) node->lch->lazy += node->lazy;
+  if (node->rch) node->rch->lazy += node->lazy;
+  node->lazy = 0;
+}
+void pull(const NodePtr &node) {
+  if (node == nullptr) return;
+  push(node->lch), push(node->rch);
+  node->size = 1, node->sum = node->val;
+  if (node->lch) node->size += node->lch->size, node->sum += node->lch->sum;
+  if (node->rch) node->size += node->rch->size, node->sum += node->rch->sum;
+}
+void split(const NodePtr node, int key, NodePtr &L, NodePtr &R) {
+  if (node == nullptr) { return void(L = R = nullptr); }
+  push(node);
+  if (key <= node->key) {
+    R = node;
+    split(node->lch, key, L, R->lch);
+  } else {
+    L = node;
+    split(node->rch, key, L->rch, R);
+  }
+  pull(node);
+}
+NodePtr meld(const NodePtr& L, const NodePtr& R) {
+  if (L == nullptr) return R;
+  if (R == nullptr) return L;
+  NodePtr node;
+  if (L->priority > R->priority) {
+    push(L); node = L;
+    node->rch = meld(L->rch, R);
+  } else {
+    push(R); node = R;
+    node->lch = meld(L, R->lch);
+  }
+  pull(node);
+  return node;
+}
+void insert(NodePtr &root, int pos, int val) {
+  NodePtr aux1, aux2;
+  split(root, pos, aux1, aux2);
+  root = meld(meld(aux1, new Node(pos, val)), aux2);
+}
+ 
+string to_string(const Node &x) {
+  return to_string(vector<i64>{x.key, x.val, x.sum, x.lazy});
+} 
+string to_string(const NodePtr &node) {
+  if (node == nullptr) { return " "; }
+  return "<" + to_string(node->lch) + to_string(*node) + to_string(node->rch) + ">";
+}
+void done(NodePtr node) {
+  if (!node) return;
+  done(node->lch), done(node->rch);
+  delete node;
+}
+
+/***********************************************************************
+ 
+mt19937 rng32(chrono::steady_clock::now().time_since_epoch().count());
+uniform_int_distribution<int32_t> gen(1, INT32_MAX - 1);
 
 struct Treap {
 
@@ -42,7 +121,6 @@ struct Treap {
     return erase(root, pos)->val;
   }
   
-  /***************************[HELPERS]*********************************/
   struct Node {
     int val;
     int priority;
@@ -149,7 +227,7 @@ struct Treap {
   friend ostream& operator << (ostream& os, const Treap& g) {
     return os << g.root;
   }
-  /***************************[/HELPERS]*****************************/
+  
 };
 
 signed main() {
@@ -178,3 +256,4 @@ signed main() {
 
   return 0;
 }
+***********************************************************************/
