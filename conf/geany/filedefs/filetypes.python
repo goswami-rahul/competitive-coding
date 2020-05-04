@@ -5,3 +5,6 @@ FT_00_WD=
 EX_00_LB=_Execute
 EX_00_CM=python3 "%f"
 EX_00_WD=
+[indentation]
+width=4
+type=0
