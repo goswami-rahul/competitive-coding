@@ -1,7 +1,7 @@
 struct Trie {
   struct Node {
-    static const int ALPHA = 2;
-    bool is;
+    static const int ALPHA = 26;
+    int is;
     array<int,ALPHA> nxt;
     int depth;
     Node(): is(), nxt(), depth() {}
@@ -10,19 +10,19 @@ struct Trie {
     }
   };
   vector<Node> nodes;
-  int ptr = 1;
-  Trie(const int nax = 2e5): nodes(nax) {}
-  bool add(const string &s) {
+  int ptr;
+  Trie(): nodes(1), ptr(1) {}
+  void add(const string &s) {
     int cur = 0;
     for (const char &c: s) {
-      int u = c - '0';
+      int u = c - 'A';
       if (!nodes[cur][u]) {
         nodes[ptr].depth = 1 + nodes[cur].depth;
+        nodes.emplace_back();
         nodes[cur][u] = ptr++;
       }
       cur = nodes[cur][u];
     }
-    if (nodes[cur].is) return false;
-    return nodes[cur].is = true;
+    nodes[cur].is++;
   }
 };

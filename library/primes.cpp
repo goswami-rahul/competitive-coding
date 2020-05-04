@@ -1,14 +1,14 @@
 /*********************/
-const int Primax = 1000005;
-int lpf[Primax];
+const int M = 1e6 + 42;
+int lpf[M];
 vector<int> primes;
 
-void prepare_primes() {
-  for (int i = 1; i < Primax; ++i) lpf[i] = i;
-  for (int i = 2; i < Primax; ++i) {
+void prep_primes() {
+  for (int i = 1; i < M; ++i) lpf[i] = i;
+  for (int i = 2; i < M; ++i) {
     if (lpf[i] == i) {
       primes.push_back(i);
-      for (int j = i + i; j < Primax; j += i) {
+      for (int j = i + i; j < M; j += i) {
         if (lpf[j] == j) lpf[j] = i;
       }
     }

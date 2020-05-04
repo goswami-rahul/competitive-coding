@@ -34,11 +34,11 @@ void split(const NodePtr node, int key, NodePtr &L, NodePtr &R) {
   if (node == nullptr) { return void(L = R = nullptr); }
   push(node);
   if (key <= node->key) {
+    split(node->lch, key, L, node->lch);
     R = node;
-    split(node->lch, key, L, R->lch);
   } else {
+    split(node->rch, key, node->rch, R);
     L = node;
-    split(node->rch, key, L->rch, R);
   }
   pull(node);
 }
@@ -76,7 +76,7 @@ void done(NodePtr node) {
 }
 
 /***********************************************************************
- 
+ ***********************************************************************/
 mt19937 rng32(chrono::steady_clock::now().time_since_epoch().count());
 uniform_int_distribution<int32_t> gen(1, INT32_MAX - 1);
 
@@ -121,37 +121,34 @@ struct Treap {
     return erase(root, pos)->val;
   }
   
+  /***************************[HELPERS]*********************************/
   struct Node {
     int val;
+    bool flip;
     int priority;
     int size;
-    bool flip;
     NodePtr lch, rch;
-    Node() = default;
-    Node(int _val): val(_val) {
-      size = 1;
-      flip = false;
-      priority = gen(rng32);
-    }
+    Node(): lch(nullptr), rch(nullptr);
+    Node(int v): val(v), flip(0), size(1), priority(gen(rng32)), lch(0), rch(0) {}
   };
-  static int size(const NodePtr& node) {
+  static int size(const NodePtr &node) {
     return node == nullptr ? 0 : node->size;
   }
-  static int priority(const NodePtr& node) {
+  static int priority(const NodePtr &node) {
     return node == nullptr ? -1 : node->priority;
   }
-  static void pull(const NodePtr& node) {
+  static void pull(const NodePtr &node) {
     if (node == nullptr) return;
     node->size = 1 + size(node->lch) + size(node->rch);
   }
-  static void push(const NodePtr& node) {
+  static void push(const NodePtr &node) {
     if (node->flip == false) return;
     swap(node->lch, node->rch);
     if (node->lch != nullptr) node->lch->flip ^= true;
     if (node->rch != nullptr) node->rch->flip ^= true;
     node->flip = false;
   }
-  static void heapify(NodePtr& node) {
+  static void heapify(NodePtr &node) {
     if (node == nullptr) return;
     NodePtr& max_ch = priority(node->lch) > priority(node->rch) ? node->lch : node->rch;
     if (priority(max_ch) > priority(node)) {
@@ -159,7 +156,7 @@ struct Treap {
       heapify(max_ch);
     }
   }
-  static NodePtr find(const NodePtr& node, int key, int offset = 0) {
+  static NodePtr find(const NodePtr &node, int key, int offset = 0) {
     if (node == nullptr) return nullptr;
     push(node);
     int cur_key = size(node->lch) + offset;
@@ -183,7 +180,7 @@ struct Treap {
     pull(node);
     return deleted;
   }
-  static void split(const NodePtr node, int key, NodePtr& L, NodePtr& R, int offset = 0) {
+  static void split(const NodePtr node, int key, NodePtr &L, NodePtr &R, int offset = 0) {
     if (node == nullptr) { return void(L = R = nullptr); }
     push(node);
     int cur_key = size(node->lch) + offset;
@@ -210,24 +207,19 @@ struct Treap {
     pull(node);
     return node;
   }
-
-  friend void debug(const NodePtr& node, ostream& os = std::cerr) {
-    if (node == nullptr) { return; }
-    //~ push(node);
-    debug(node->lch);
-    os << *node << ' ';
-    debug(node->rch);
-  }
-  friend ostream& operator << (ostream& os, Node g) {
-    return os << g.val;
-  }
-  friend ostream& operator << (ostream& os, NodePtr g) {
-    debug(g, os); return os;
-  }
-  friend ostream& operator << (ostream& os, const Treap& g) {
-    return os << g.root;
-  }
   
+  friend string to_string(const Node &nodev) {
+    return "{}";
+  } 
+  friend string to_string(const NodePtr &node) {
+    if (node == nullptr) { return "<>"; }
+    //~ push(node);
+    return to_string(node->lch) + to_string(*node) + to_string(node->rch);
+  }
+  friend string to_string(const Treap &treap) {
+    return to_string(treap.root);
+  }
+  /***************************[/HELPERS]*****************************/
 };
 
 signed main() {
@@ -256,4 +248,3 @@ signed main() {
 
   return 0;
 }
-***********************************************************************/

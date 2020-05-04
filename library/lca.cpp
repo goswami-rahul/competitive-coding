@@ -1,4 +1,4 @@
-template<class Monoid>
+template<class Monoid, int InNodes = 0>
 class LCA {
   using T = typename Monoid::type;
   struct Edge {
@@ -87,3 +87,41 @@ struct Sum {
   static type id() { return 0; }
   static type op(const type &l, const type &r) { return l + r; }
 };
+
+/*************************************/
+// raw
+const int N = 2e5 + 42, LN = 18;
+vector<int> g[N];
+int ent[N];
+int ext[N];
+int dep[N];
+int par[LN][N];
+
+int lca(int u, int v) {
+  if (ent[u] > ent[v]) swap(u, v);
+  if (ent[u] < ent[v] && ext[v] < ext[u]) return u;
+  for (int i = LN - 1; ~i; --i) {
+    if (ent[par[i][u]] < ent[v] && ext[v] < ext[par[i][u]]) continue;
+    u = par[i][u];
+  }
+  return par[0][u];
+}
+void dfs(int u, int p = 0) {
+  static int tick = 0;
+  par[0][u] = p;
+  for (int i = 1; i < LN; ++i)
+    par[i][u] = par[i - 1][par[i - 1][u]];
+  ent[u] = tick++;
+  for (int v : g[u]) if (v != p) dep[v] = 1 + dep[u], dfs(v, u);
+  ext[u] = tick++;
+}
+
+void read(int n) {
+  //~ for (int i = 0; i < n; ++i) g[i].clear();
+for (int i = 0; i < n - 1; ++i) {
+  int u, v; cin >> u >> v;
+  --u, --v;
+  g[u].push_back(v);
+  g[v].push_back(u);
+}
+} 
