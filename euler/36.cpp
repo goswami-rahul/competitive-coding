@@ -33,9 +33,27 @@ int const MOD = 1e9 + 7;
 i64 const INF = 1e18 + 42;
 /***********************************************************************/
 
+bool pal(int num, int base) {
+  vector<int> seq;
+  while (num) {
+    seq.push_back(num % base);
+    num /= base;
+  }
+  auto rev = seq;
+  reverse(ALL(rev));
+  return seq == rev;
+}
 int32_t main(int argc, char * argv[]) {
   cin.tie(nullptr) -> sync_with_stdio(false);
   (void) argc; (void) argv;
   
-  
+  const int M = (int) 1e6;
+  int sum = 0;
+  for (int i = 1; i < M; i += 2) {
+    if (pal(i, 10) and pal(i, 2)) {
+      sum += i;
+      error(i);
+    }
+  }
+  cout << sum << endl;
 }

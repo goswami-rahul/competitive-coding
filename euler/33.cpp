@@ -37,5 +37,23 @@ int32_t main(int argc, char * argv[]) {
   cin.tie(nullptr) -> sync_with_stdio(false);
   (void) argc; (void) argv;
   
-  
+  int num = 1, den = 1;
+  for (int i = 10; i < 100; ++i) {
+    for (int j = i + 1; j < 100; ++j) {
+      if (i % 10 and j % 10) {
+        int ok = 0;
+        for (int a : {i % 10, i / 10}) {
+          for (int b : {j % 10, j / 10}) {
+            ok |= (a * j == b * i && (a ^ (i % 10) ^ (i / 10)) == (b ^ (j % 10) ^ (j / 10)));
+          }
+        }
+        if (ok) num *= i, den *= j;
+        if (ok) error(i, j);
+      }
+    } 
+  }
+  int g = gcd(num, den);
+  error(num, den, g);
+  num /= g, den /= g;
+  cout << den << endl;
 }

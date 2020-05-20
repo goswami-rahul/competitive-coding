@@ -37,5 +37,22 @@ int32_t main(int argc, char * argv[]) {
   cin.tie(nullptr) -> sync_with_stdio(false);
   (void) argc; (void) argv;
   
-  
+  string ans;
+  for (int a = 1; a < 100000; ++a) {
+    array<int, 10> has{};
+    has[0] = 1;
+    string cur;
+    int b = 0;
+    while ((int) cur.size() < 9) {
+      b += a;
+      string s = to_string(b);
+      for (char c : s) has[c - '0']++;
+      cur += s;
+    }
+    if (all_of(ALL(has), Lu(u == 1))) {
+      ans = cur;
+      error(a, cur);
+    } 
+  }
+  cout << ans << endl;
 }

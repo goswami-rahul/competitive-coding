@@ -37,5 +37,23 @@ int32_t main(int argc, char * argv[]) {
   cin.tie(nullptr) -> sync_with_stdio(false);
   (void) argc; (void) argv;
   
-  
+  array<int, 10> factorial;
+  factorial[0] = 1;
+  for (int i = 1; i < 10; ++i) {
+    factorial[i] = factorial[i - 1] * i;
+  }
+  int sum = 0;
+  int num = 10;
+  while (1) {
+    int d = num, s = 0;
+    while (d > 0) {
+      s += factorial[d % 10];
+      d /= 10;
+    }
+    if (num == s) {
+      sum += num;
+      error(num, sum);
+    }
+    ++num;
+  }
 }

@@ -37,5 +37,23 @@ int32_t main(int argc, char * argv[]) {
   cin.tie(nullptr) -> sync_with_stdio(false);
   (void) argc; (void) argv;
   
-  
+  int ans = 0;
+  const int M = (int) 1e6;
+  array<bool, M> a{};
+  a[0] = a[1] = 1;
+  for (int i = 2; i < M; ++i) {
+    if (a[i] == 0) {
+      for (int j = i + i; j < M; j += i) {
+        a[j] = 1;
+      }
+      int ok = 1;
+      string s = to_string(i);
+      for (int k = 1; k < (int) s.size() && ok; ++k) {
+        int d = stoi(s.substr(k, string::npos) + s.substr(0, k));
+        if (a[d]) ok = 0;
+      }
+      ans += ok;
+    }
+  }
+  cout << ans << endl;
 }

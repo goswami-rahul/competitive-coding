@@ -33,9 +33,42 @@ int const MOD = 1e9 + 7;
 i64 const INF = 1e18 + 42;
 /***********************************************************************/
 
+bool prime(int n) {
+  if (n < 2) return false;
+  for (int i = 2; i * i <= n; ++i) {
+    if (n % i == 0) return false;
+  }
+  return true;
+}
 int32_t main(int argc, char * argv[]) {
   cin.tie(nullptr) -> sync_with_stdio(false);
   (void) argc; (void) argv;
   
-  
+  int cnt = 0;
+  int ans = 0;
+  set<int> candidates{2, 3, 5, 7};
+  int itr = 0;
+  while (!candidates.empty()) {
+    ++itr;
+    int num = *candidates.begin();
+    candidates.erase(num);
+    if (num > 10) {
+      int ok = 1;
+      for (int p10 = 10; p10 < num && ok; p10 *= 10) {
+        ok &= prime(num % p10);
+      }
+      if (ok) {
+        ans += num;
+        error(itr, num, ans);
+        ++cnt;
+      }
+    }
+    for (int d : {1, 3, 5, 7, 9}) {
+      if (prime(num * 10 + d)) {
+        candidates.insert(num * 10 + d);
+      }
+    }
+  }
+  error(itr, cnt);
+  cout << ans << endl;
 }

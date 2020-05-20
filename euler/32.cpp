@@ -37,5 +37,25 @@ int32_t main(int argc, char * argv[]) {
   cin.tie(nullptr) -> sync_with_stdio(false);
   (void) argc; (void) argv;
   
-  
+  set<int> ans;
+  auto process = [&ans] (int a, int b) {
+    array<int, 10> cnt{};
+    cnt[0] = 1;
+    for (int x : {a, b, a * b}) {
+      while (x > 0) {
+        cnt[x % 10]++;
+        x /= 10;
+      }
+    }
+    if (all_of(ALL(cnt), Lu(u == 1))) ans.insert(a * b);
+  };
+  for (int a = 2; a < 1000; ++a) {
+    for (int b = a + 1; b < 100000; ++b) {
+      process(a, b);
+    }
+  }
+  error(ans.size(), ans);
+  int sum = 0;
+  for (int x : ans) sum += x;
+  cout << sum << endl;
 }
