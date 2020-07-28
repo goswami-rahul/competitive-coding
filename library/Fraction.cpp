@@ -1,32 +1,41 @@
 struct frac {
-  i64 num, den;
-  frac(i64 x, i64 y) {
+  typedef i64 num_t;
+  typedef __int128 mul_t;
+  num_t num, den;
+  frac(num_t x = 0, num_t y = 1) {
     if (x == 0 || y == 0) {
-      assert (x || y);
-      num = y == 0;
-      den = x == 0;
+      //~ assert (x || y);
+      if (x < 0) {
+        num = -1, den = 0; // change to num = 1 if sign dont matter for oo
+      } else if (x > 0) {
+        num = 1, den = 0;
+      } else {
+        num = 0, den = 1;
+      }
       return;
     }
     if (y < 0) {
       x = -x; y = -y;
     }
-    i64 g = __gcd(abs(x), abs(y));
-    num = x / g;
-    den = y / g;
+    num = x, den = y;
+    norm();
   }
-  frac(pair<i64,i64> p) {
-    frac(p.first, p.second);
+  inline void norm() {
+    num_t g = __gcd(abs(num), abs(den));
+    num /= g;
+    den /= g;
   }
   bool operator < (const frac &rhs) const {
-    return (i64) num * rhs.den < (i64) rhs.num * den;
+    return (mul_t) num * rhs.den < (mul_t) rhs.num * den;
   }
   bool operator > (const frac &rhs) const {
-    return (i64) num * rhs.den > (i64) rhs.num * den;
+    return (mul_t) num * rhs.den > (mul_t) rhs.num * den;
   }
   bool operator == (const frac &rhs) const {
-    if (num == 0) return rhs.num == 0;
-    if (den == 0) return rhs.den == 0;
-    return num == rhs.num && den == rhs.den;
+    return (mul_t) num * rhs.den == (mul_t) rhs.num * den;
+    //~ if (num == 0) return rhs.num == 0;
+    //~ if (den == 0) return rhs.den == 0;
+    //~ return num == rhs.num && den == rhs.den;
   }
   frac operator + (const frac &rhs) const {
     return frac(num * rhs.den + rhs.num * den, den * rhs.den);
@@ -46,11 +55,10 @@ struct frac {
   static frac inf() {
     return frac(1, 0);
   }
-  friend ostream &operator << (ostream &os, const frac &p) {
-    return os << p.num << "/" << p.den;
+  friend string to_string(const frac &f) {
+    return to_string(to_string(f.num) + "/" + to_string(f.den));
   }
 };
-
 /** https://codeforces.com/blog/entry/67091?#comment-512389 */
 // geniosity
 rat find_best(rat l, rat r) {

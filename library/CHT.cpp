@@ -4,6 +4,7 @@ struct Line {
   bool operator<(i64 x) const { return nxt < x; }
 };
 
+// maximizes
 struct CHT : multiset<Line, less<>> {
   static const i64 Inf = LLONG_MAX;
   i64 div(i64 a, i64 b) { 

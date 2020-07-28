@@ -17,8 +17,8 @@ struct Trie {
     for (const char &c: s) {
       int u = c - 'A';
       if (!nodes[cur][u]) {
-        nodes[ptr].depth = 1 + nodes[cur].depth;
         nodes.emplace_back();
+        nodes[ptr].depth = 1 + nodes[cur].depth;
         nodes[cur][u] = ptr++;
       }
       cur = nodes[cur][u];

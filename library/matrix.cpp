@@ -1,7 +1,7 @@
 struct Matrix {
   static const int MOD = 1e9 + 7;
   static const long long SQMOD = (long long) MOD * MOD;
-  static int const N = 5;
+  static int const N = 2;
   using T = int;
   T x[N][N];
   int n, m;
@@ -15,9 +15,9 @@ struct Matrix {
     for (int i = 0; i < n; ++i) for (int j = 0; j < m; ++j)
       x[i][j] = mat[i][j];
   }
-  Matrix& operator = (const vector<vector<int>> &&mat) {
-    return *this = Matrix(forward<decltype(mat)>(mat));
-  }
+  //~ Matrix& operator = (const vector<vector<int>> &&mat) {
+    //~ return *this = Matrix(forward<decltype(mat)>(mat));
+  //~ }
   T* operator [] (int r) {
     return x[r];
   }
@@ -30,7 +30,7 @@ struct Matrix {
     return res;
   }
   Matrix& operator += (const Matrix &rhs) {
-    assert (n == rhs.n && m == rhs.m);
+    //~ assert (n == rhs.n && m == rhs.m);
     for (int i = 0; i < n; ++i) for (int j = 0; j < m; ++j) {
       x[i][j] += rhs[i][j];
       if (x[i][j] >= MOD) x[i][j] -= MOD;
@@ -42,7 +42,7 @@ struct Matrix {
     return lhs += rhs;
   }
   friend Matrix operator * (const Matrix &A, const Matrix &B) {
-    assert (A.m == B.n);
+    //~ assert (A.m == B.n);
     Matrix res(A.n, B.m);
     for (int i = 0; i < res.n; i++) for (int j = 0; j < res.m; j++) {
       long long sum = 0LL;
@@ -55,7 +55,7 @@ struct Matrix {
     return res;
   }
   friend Matrix operator ^ (Matrix base, long long ex) {
-    assert (base.n == base.m);
+    //~ assert (base.n == base.m);
     Matrix res = Matrix::unit(base.n);
     while (ex > 0) {
       if (ex & 1) res = res * base;
@@ -64,22 +64,39 @@ struct Matrix {
     }
     return res;
   }
+  friend Matrix operator * (Matrix A, int scalar) {
+    for (int i = 0; i < A.n; ++i) {
+      for (int j = 0; j < A.m; ++j) {
+        A[i][j] = (int) ((long long) A[i][j] * scalar % MOD);
+      }
+    }
+    return A;
+  }
+#ifdef Rahul
+  friend string to_string(Matrix A) {
+    vector<vector<T>> tmp;
+    for (int i = 0; i < A.n; ++i) {
+      tmp.emplace_back(A[i], A[i] + A.m);
+    }
+    return to_string(tmp);
+  }
+#endif
   Matrix& operator *= (const Matrix &rhs) {
     return *this = *this * rhs;
   }
   Matrix& operator ^= (const long long &ex) {
     return *this = *this ^ ex;
   }
-  friend ostream &operator << (ostream &os, const Matrix& A) {
-    os << "(" << A.n << " x " << A.m << ")" << endl;
-    os << string(A.m * 2, '-');
-    for (int i = 0; i < A.n; ++i) {
-      os << endl;
-      for (int j = 0; j < A.m; ++j) os << A[i][j] << ' ';
-    }
-    return os << endl << string(A.m * 2, '-');
-  }
 };
+
+// calculate geometric series: A^0 + A^1 + ... + A^k [O(N^3 * log^2(k))]
+const int N = 8;
+const Matrix I = Matrix::unit(N);
+Matrix calc(Matrix &a, i64 k) {
+  if (k == 1) return I;
+  if (k & 1) return calc(a, k - 1) + (a ^ (k - 1));
+  return ((a ^ (k >> 1)) + I) * calc(a, k >> 1);
+}
 
 // Calculate geometric series: A^0 + A^1 + ... + A^k
 Matrix geometricseries(Matrix A, long long k) {

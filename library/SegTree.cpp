@@ -1,14 +1,20 @@
 struct Node {
   i64 minv, lz;
   Node(): minv(), lz() {}
-  friend Node operator + (const Node &lhs, const Node &rhs) {
-    Node node;
-    node.minv = min(lhs.minv, rhs.minv);
-    return node;
+  friend Node operator + (const Node &ln, const Node &rn) {
+    Node pn;
+    pn.minv = min(ln.minv, rn.minv);
+    return pn;
   }
-  //~ friend ostream &operator << (ostream &os, const Node &p) {
-    //~ return os << "<" << p.minv << ", " << p.lz << ">";
-  //~ }
+#ifdef Rahul
+  friend string to_string(const Node &p) {
+    string s = "<";
+    s += to_string(minv) + ", ";
+    s += to_string(lz) + ", ";
+    s += ">";
+    return s;
+  }
+#endif
 };
 struct SegTree {
   #define li (i + i)
@@ -16,7 +22,7 @@ struct SegTree {
   vector<int> ss, ee;
   vector<Node> t;
   SegTree(int n): ss(n << 2), ee(n << 2), t(n << 2) {
-    build(1, 1, n);
+    build(1, 0, n - 1);
   }
   void build(int i, int l, int r) {
     ss[i] = l, ee[i] = r;
@@ -24,6 +30,21 @@ struct SegTree {
     int m = (l + r) >> 1;
     build(li, l, m); build(ri, m + 1, r);
     //~ t[i] = t[li] + t[ri];
+  }
+  template<typename T>
+  SegTree(const vector<T> &a): ss(a.size() << 2), ee(a.size() << 2), t(a.size() << 2) {
+    build(1, 0, int(a.size()) - 1);
+  }
+  template<typename T>
+  void build(int i, int l, int r, const vector<T> &a) {
+    ss[i] = l, ee[i] = r;
+    if (l == r) { 
+      t[i] = a[l];
+      return; 
+    }
+    int m = (l + r) >> 1;
+    build(li, l, m, a); build(ri, m + 1, r, a);
+    t[i] = t[li] + t[ri];
   }
   inline void push(int i) {
     i64 &lz = t[i].lz;
@@ -36,24 +57,26 @@ struct SegTree {
     }
     lz = 0;
   }
-  inline void put(int i, int pos, i64 a) {
+  template<typename T>
+  inline void put(int i, int pos, T val) {
     // point update
     if (ee[i] == ss[i] && pos == ss[i]) {
-      t[i] = Node(a); return;
+      t[i] = Node(val); return;
     }
     push(i);
-    if (pos <= ee[li]) update(li, pos, a); 
-    else update(ri, pos, a);
+    if (pos <= ee[li]) put(li, pos, val); 
+    else put(ri, pos, val);
     t[i] = t[li] + t[ri];
   }
-  inline void update(int i, int us, int ue, i64 a) {
+  template<typename T>
+  inline void update(int i, int us, int ue, T val) {
     // range update
     if (us <= ss[i] && ee[i] <= ue) {
-      t[i].lz += a, push(i); return;
+      t[i].lz += val, push(i); return;
     }
     push(i);
     if (ue < ss[i] || ee[i] < us) { return; }
-    update(li, us, ue, a); update(ri, us, ue, a);
+    update(li, us, ue, val); update(ri, us, ue, val);
     t[i] = t[li] + t[ri];
   }
   inline Node ask(int i, int qs, int qe) {
@@ -61,13 +84,13 @@ struct SegTree {
     if (qs == ss[i] && qe == ee[i]) { return t[i]; }
     if (qe <= ee[li]) { return ask(li, qs, qe); }
     if (qs >= ss[ri]) { return ask(ri, qs, qe); }
-    return ask(li, qs, ee[li]) +
-      ask(ri, ss[ri], qe);
+    return ask(li, qs, ee[li]) + ask(ri, ss[ri], qe);
   }
-  void update(int L, int R, i64 val) {
+  template<typename T>
+  void update(int L, int R, T val) {
     return update(1, L, R, val);
   }
-  i64 ask(int L, int R) {
+  auto ask(int L, int R) {
     return ask(1, L, R).minv;
   }
   #undef li

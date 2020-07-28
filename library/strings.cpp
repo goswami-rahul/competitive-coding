@@ -49,7 +49,7 @@ vector<int> suffix_array(string s) {
 }
 
 // kasai O(n)
-vector<int> compute_lcp(const string &s, const vector<int> &suf) {
+vector<int> calc_lcp(const string &s, const vector<int> &suf) {
   const int n = (int) s.size();
   vector<int> rank(n), lcp(n - 1);
   for (int i = 0; i < n; ++i) rank[suf[i]] = i;

@@ -24,7 +24,9 @@ struct Basis {
     return x == 0 ? mpow(2, n - rank) : 0;
   }
   Basis operator + (Basis o) const {
+    int nn = n + o.n;
     for (int i = 0; i < K; ++i) if (bas[i]) o.add(bas[i]);
+    o.n = nn;
     return o;
   }
 };

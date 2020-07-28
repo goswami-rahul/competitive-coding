@@ -112,7 +112,10 @@ void dfs(int u, int p = 0) {
   for (int i = 1; i < LN; ++i)
     par[i][u] = par[i - 1][par[i - 1][u]];
   ent[u] = tick++;
-  for (int v : g[u]) if (v != p) dep[v] = 1 + dep[u], dfs(v, u);
+  for (int v : g[u]) if (v != p) {
+    dep[v] = 1 + dep[u];
+    dfs(v, u);
+  }
   ext[u] = tick++;
 }
 

@@ -7,6 +7,7 @@ struct Sat {
     g.resize(n);
     r.resize(n);
   }
+  // add u << 1 for u, u << 1 | 1 for ~u
   void implies(int u, int v) {
     // u => v
     g[u].push_back(v);

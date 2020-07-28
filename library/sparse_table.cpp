@@ -1,10 +1,10 @@
 template<typename T>
 struct sparse_table {
-  function<T(T,T)> F;
+#define F(x, y) ((x < y) ? x : y) 
   vector<vector<T>> table;
   vector<int> logn;
   int n, k;
-  sparse_table(vector<T> &vec, function<T(T,T)> func): F(func) {
+  sparse_table(vector<T> &vec) {
     n = (int) vec.size();
     logn.resize(n + 1);
     logn[1] = 0;
@@ -23,6 +23,7 @@ struct sparse_table {
     int j = logn[R - L + 1];
     return F(table[j][L], table[j][R - (1 << j) + 1]);
   }
+#undef F
 };
 /*************************************************************/
 
