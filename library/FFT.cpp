@@ -1,4 +1,5 @@
 namespace FFT {
+  typedef i64 res_t;
   typedef double num_t;
   struct Complex {
     num_t real, imag;
@@ -67,9 +68,9 @@ namespace FFT {
         }
       }
     }
-    if (invert) for (Complex &x: a) x /= n;
+    if (invert) for (Complex &x : a) x /= n;
   }
-  vector<int> multiply(vector<int> const &a, vector<int> const &b) {
+  vector<res_t> multiply(vector<res_t> const &a, vector<res_t> const &b) {
     vector<Complex> fa(a.begin(), a.end()), fb(b.begin(), b.end());
     int n = 1;
     while (n < (int) (a.size() + b.size())) n <<= 1;
@@ -80,8 +81,24 @@ namespace FFT {
     for (int i = 0; i < n; i++) fa[i] *= fb[i];
     fft(fa, true);
 
-    vector<int> result(n);
-    for (int i = 0; i < n; i++) result[i] = (int) round(fa[i].real);
+    vector<res_t> result(n);
+    for (int i = 0; i < n; i++) result[i] = (res_t) rintl(fa[i].real);
+    while (!result.empty() && result.back() == 0) result.pop_back();
+    return result;
+  }
+  vector<res_t> square(vector<res_t> const &a) {
+    vector<Complex> fa(a.begin(), a.end());
+    int n = 1;
+    while (n < (int) (a.size() + a.size())) n <<= 1;
+    fa.resize(n);
+    
+    prepare_cache(n);
+    fft(fa, false); 
+    for (int i = 0; i < n; i++) fa[i] *= fa[i];
+    fft(fa, true);
+
+    vector<res_t> result(n);
+    for (int i = 0; i < n; i++) result[i] = (res_t) rintl(fa[i].real);
     while (!result.empty() && result.back() == 0) result.pop_back();
     return result;
   }

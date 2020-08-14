@@ -33,7 +33,7 @@ struct SegTree {
   }
   template<typename T>
   SegTree(const vector<T> &a): ss(a.size() << 2), ee(a.size() << 2), t(a.size() << 2) {
-    build(1, 0, int(a.size()) - 1);
+    build(1, 0, int(a.size()) - 1, a);
   }
   template<typename T>
   void build(int i, int l, int r, const vector<T> &a) {
