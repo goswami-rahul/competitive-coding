@@ -1,10 +1,10 @@
 template<typename T>
-struct sparse_table {
+struct Sparse {
 #define F(x, y) ((x < y) ? x : y) 
   vector<vector<T>> table;
   vector<int> logn;
   int n, k;
-  sparse_table(vector<T> &vec) {
+  Sparse(vector<T> &vec) {
     n = (int) vec.size();
     logn.resize(n + 1);
     logn[1] = 0;
@@ -28,13 +28,17 @@ struct sparse_table {
 /*************************************************************/
 
 #define Op max
+int logn[N + M];
 int a[N][M];
 int f[LM][N][M];
 int g[LM][LN][M][N];
 void build() {
+  for (int i = 2; i < N + M; ++i) {
+    logn[i] = logn[i >> 1] + 1;
+  }
   for (int k = 1; k <= n; k++) {
     for (int i = 1; i <= m; i++) {
-      f[0][k][i] = a[k - 1][i - 1];
+      f[0][k][i] = a[k][i];
     }
     for (int j = 1; 1 << j <= m; j++) {
       for (int i = 0; i + (1 << j) - 1 <= m; i++) {
@@ -56,7 +60,6 @@ void build() {
   }
 }
 int ask(int x1, int y1, int x2, int y2) {
-  ++x1, ++y1, ++x2, ++y2;
   int u = x2 - x1 + 1, v = y2 - y1 + 1;
   int lgu = logn[u];
   int lgv = logn[v];

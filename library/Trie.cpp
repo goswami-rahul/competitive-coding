@@ -1,28 +1,32 @@
-struct Trie {
-  struct Node {
-    static const int ALPHA = 26;
-    int is;
-    array<int,ALPHA> nxt;
-    int depth;
-    Node(): is(), nxt(), depth() {}
-    int& operator [] (size_t idx) {
-      return nxt[idx];
-    }
+struct trie {
+  int n;
+  vector<array<int,2>> go;
+  trie() : n(1) { 
+    go.resize(n);
   };
-  vector<Node> nodes;
-  int ptr;
-  Trie(): nodes(1), ptr(1) {}
-  void add(const string &s) {
+  void put(int x) {
     int cur = 0;
-    for (const char &c: s) {
-      int u = c - 'A';
-      if (!nodes[cur][u]) {
-        nodes.emplace_back();
-        nodes[ptr].depth = 1 + nodes[cur].depth;
-        nodes[cur][u] = ptr++;
+    for (int i = 29; i >= 0; --i) {
+      int b = x >> i & 1;
+      if (!go[cur][b]) {
+        go[cur][b] = n++;
+        go.emplace_back();
       }
-      cur = nodes[cur][u];
+      cur = go[cur][b];
     }
-    nodes[cur].is++;
+  }
+  int ask(int x) {
+    // minimum ai ^ x
+    int cur = 0, res = 0;
+    for (int i = 29; i >= 0; --i) {
+      int b = x >> i & 1;
+      if (go[cur][b]) {
+        cur = go[cur][b];
+      } else {
+        cur = go[cur][!b];
+        res += 1 << i;
+      }
+    }
+    return res;
   }
 };
