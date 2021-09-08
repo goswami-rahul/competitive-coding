@@ -20,7 +20,7 @@ void upd(int &nid, int pos, int val, int l, int r) {
   nid = nptr++;
   if (l == r) {
     nodes[nid].val = val;
-    return
+    return;
   }
   upd(nodes[nid].lc, pos, val, l, (l + r) / 2);
   upd(nodes[nid].rc, pos, val, (l + r) / 2 + 1, r);
