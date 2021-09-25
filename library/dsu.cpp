@@ -3,10 +3,10 @@ struct info {
   int u, szu, v, szv;
 };
 info op[N];
-struct UF {
+struct UnionFind {
   vector<int> par, sz;
   int ptr;
-  UF(int n): par(n), sz(n, 1), ptr(0) {
+  UnionFind(int n): par(n), sz(n, 1), ptr(0) {
     iota(par.begin(), par.end(), 0);
   }
   int find(int u) {
@@ -35,9 +35,9 @@ struct UF {
 };
 
 // with compression
-struct UF {
+struct UnionFind {
   vector<int> par, sz;
-  UF(int n): par(n), sz(n, 1) {
+  UnionFind(int n): par(n), sz(n, 1) {
     iota(par.begin(), par.end(), 0);
   }
   int find(int u) {

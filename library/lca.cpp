@@ -97,7 +97,7 @@ int ext[N];
 int dep[N];
 int par[LN][N];
 
-int lca(int u, int v) {
+int Lca(int u, int v) {
   if (ent[u] > ent[v]) swap(u, v);
   if (ent[u] < ent[v] && ext[v] < ext[u]) return u;
   for (int i = LN - 1; ~i; --i) {
@@ -106,7 +106,7 @@ int lca(int u, int v) {
   }
   return par[0][u];
 }
-void dfs(int u, int p = 0) {
+void Dfs(int u, int p = 0) {
   static int tick = 0;
   par[0][u] = p;
   for (int i = 1; i < LN; ++i)
@@ -114,17 +114,17 @@ void dfs(int u, int p = 0) {
   ent[u] = tick++;
   for (int v : g[u]) if (v != p) {
     dep[v] = 1 + dep[u];
-    dfs(v, u);
+    Dfs(v, u);
   }
   ext[u] = tick++;
 }
 
-void read(int n) {
-  //~ for (int i = 0; i < n; ++i) g[i].clear();
-for (int i = 0; i < n - 1; ++i) {
-  int u, v; cin >> u >> v;
-  --u, --v;
-  g[u].push_back(v);
-  g[v].push_back(u);
-}
+void ReadGraph(int n) {
+  // for (int i = 0; i < n; ++i) g[i].clear();
+  for (int i = 0; i < n - 1; ++i) {
+    int u, v; cin >> u >> v;
+    --u, --v;
+    g[u].push_back(v);
+    g[v].push_back(u);
+  }
 } 

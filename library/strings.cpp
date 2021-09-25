@@ -1,4 +1,4 @@
-vector<int> prefix_function(const string &s) {
+vector<int> PrefixFn(const string &s) {
   vector<int> pi(s.size());
   for (int i = 1; i < (int) s.size(); ++i) {
     int p = pi[i - 1];
@@ -8,9 +8,9 @@ vector<int> prefix_function(const string &s) {
   return pi;
 }
 
-auto automata(string s) {
+auto Automata(string s) {
   s += '$';
-  auto pi = prefix_function(s);
+  auto pi = PrefixFn(s);
   vector<array<int,256>> aut(s.size());
   for (int i = 0; i < (int) s.size(); ++i) {
     for (char c = 'a'; c <= 'z'; c++) {
@@ -21,7 +21,7 @@ auto automata(string s) {
   return aut;
 }
 
-vector<int> suffix_array(string s) {
+vector<int> SuffixArray(string s) {
   s += "$";
   const int ALPHA = 256, n = (int) s.size();
   vector<int> suf(n), cls(s.begin(), s.end());
@@ -49,7 +49,7 @@ vector<int> suffix_array(string s) {
 }
 
 // kasai O(n)
-vector<int> calc_lcp(const string &s, const vector<int> &suf) {
+vector<int> CalcLcp(const string &s, const vector<int> &suf) {
   const int n = (int) s.size();
   vector<int> rank(n), lcp(n - 1);
   for (int i = 0; i < n; ++i) rank[suf[i]] = i;
@@ -68,7 +68,7 @@ for (int i = 0; i < n - 1; ++i)
   tree[i + n] = lcp[i];
 for (int i = n - 1; i > 0; --i) 
   tree[i] = min(tree[i << 1], tree[i << 1 | 1]);
-auto ask_lcp = [&] (int L, int R) {
+auto AskLcp = [&] (int L, int R) {
   if (L == R) return n - L;
   L = ranks[L], R = ranks[R];
   if (L > R) swap(L, R);

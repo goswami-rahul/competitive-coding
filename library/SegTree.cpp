@@ -1,6 +1,6 @@
 struct Node {
-  i64 minv, lz;
-  Node(): minv(), lz() {}
+  int minv, lz;
+  Node(int x = 2e9): minv(x), lz(0) {}
   friend Node operator + (const Node &ln, const Node &rn) {
     Node pn;
     pn.minv = min(ln.minv, rn.minv);
@@ -9,8 +9,8 @@ struct Node {
 #ifdef Rahul
   friend string to_string(const Node &p) {
     string s = "<";
-    s += to_string(minv) + ", ";
-    s += to_string(lz) + ", ";
+    s += to_string(p.minv) + ", ";
+    s += to_string(p.lz) + ", ";
     s += ">";
     return s;
   }
@@ -47,9 +47,9 @@ struct SegTree {
     t[i] = t[li] + t[ri];
   }
   inline void push(int i) {
-    i64 &lz = t[i].lz;
+    auto &lz = t[i].lz;
     if (lz == 0) { return; }
-    i64 len = ee[i] - ss[i] + 1;
+    int len = ee[i] - ss[i] + 1;
     t[i].minv += lz;
     if (len > 1) {
       t[li].lz += lz;

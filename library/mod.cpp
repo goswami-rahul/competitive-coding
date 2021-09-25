@@ -35,7 +35,7 @@ inline void mdivs(int &a, int b, int mod = MOD) {
   a = mdiv(a, b, mod);
 }
 vector<int> fac, ifac;
-void prep_fact(int nax = 1e6 + 40) {
+void RunFactorial(int nax = 1e6 + 40) {
   fac.resize(nax);
   ifac.resize(nax);
   fac[0] = 1;
@@ -43,7 +43,7 @@ void prep_fact(int nax = 1e6 + 40) {
   ifac[nax - 1] = inv(fac[nax - 1]);
   for (int i = nax - 1; i > 0; --i) ifac[i - 1] = mul(i, ifac[i]);
 }
-inline int ncr(int n, int r) {
+inline int C(int n, int r) {
   if (n < r || r < 0 || n < 0) return 0;
   return mul(fac[n], mul(ifac[n - r], ifac[r]));
 }

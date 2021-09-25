@@ -99,7 +99,7 @@ Matrix calc(Matrix &a, i64 k) {
 }
 
 // Calculate geometric series: A^0 + A^1 + ... + A^k
-Matrix geometricseries(Matrix A, long long k) {
+Matrix Geo(Matrix A, long long k) {
   assert (A.n == A.m);
   if (k == 0) return unit(A.n);
   if (k == 1) return A + unit(A.n);

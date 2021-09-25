@@ -1,4 +1,4 @@
-vector<int> toposort(const vector<vector<int>> &g)  { 
+vector<int> Toposort(const vector<vector<int>> &g)  { 
   //~ std::priority_queue<int, vector<int>, greater<int>> leaves;
   vector<int> leaves; 
   int n = g.size();
@@ -20,8 +20,7 @@ vector<int> toposort(const vector<vector<int>> &g)  {
   }
   if((int) topo.size() < n) {
     // cycle
-    return vector<int>();
-  } else {
-    return topo;
-  }
+    throw;
+  } 
+  return topo;
 }
