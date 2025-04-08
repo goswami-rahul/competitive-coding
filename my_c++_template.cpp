@@ -1,9 +1,9 @@
 #ifdef Rahul
-# include "RAHUL.h"
+#include "RAHUL.h"
 #else
-# include <bits/stdc++.h>
-  using namespace std;
-# define error(...) 42;
+#include <bits/stdc++.h>
+using namespace std;
+#define error(...) 42;
 #endif
 #define SZ(v) int((v).size())
 #define ALL(vec) begin(vec), end(vec)

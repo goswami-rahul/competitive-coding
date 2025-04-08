@@ -1,4 +1,8 @@
 a.out
+in
 in[0-9]
+*.jar
 
 .vscode/
+.cph/
+__pycache__
