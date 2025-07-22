@@ -34,14 +34,14 @@ inline void muls(int &a, int b, int mod = MOD) {
 inline void mdivs(int &a, int b, int mod = MOD) {
   a = mdiv(a, b, mod);
 }
-vector<int> fac, ifac;
-void RunFactorial(int nax = 1e6 + 40) {
-  fac.resize(nax);
-  ifac.resize(nax);
+const int FMAX = 5e5 + 42;
+int fac[FMAX];
+int ifac[FMAX];
+void RunFactorial() {
   fac[0] = 1;
-  for (int i = 1; i < nax; ++i) fac[i] = mul(i, fac[i - 1]);
-  ifac[nax - 1] = inv(fac[nax - 1]);
-  for (int i = nax - 1; i > 0; --i) ifac[i - 1] = mul(i, ifac[i]);
+  for (int i = 1; i < FMAX; ++i) fac[i] = mul(i, fac[i - 1]);
+  ifac[FMAX - 1] = inv(fac[FMAX - 1]);
+  for (int i = FMAX - 1; i > 0; --i) ifac[i - 1] = mul(i, ifac[i]);
 }
 inline int C(int n, int r) {
   if (n < r || r < 0 || n < 0) return 0;
