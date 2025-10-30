@@ -3,7 +3,7 @@ const int M = 1e6 + 42;
 int lpf[M];
 vector<int> primes;
 
-void RunPrimes() {
+void Sieve() {
   for (int i = 1; i < M; ++i) lpf[i] = i;
   for (int i = 2; i < M; ++i) {
     if (lpf[i] == i) {
@@ -15,7 +15,6 @@ void RunPrimes() {
   }
 }
 /***********************/
-/* tourist code */
 bool is_prime(uint64_t n) {
   if (n < 2) {
     return false;
