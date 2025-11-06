@@ -1,21 +1,5 @@
-/*********************/
-const int M = 1e6 + 42;
-int lpf[M];
-vector<int> primes;
-
-void Sieve() {
-  for (int i = 1; i < M; ++i) lpf[i] = i;
-  for (int i = 2; i < M; ++i) {
-    if (lpf[i] == i) {
-      primes.push_back(i);
-      for (int j = i + i; j < M; j += i) {
-        if (lpf[j] == j) lpf[j] = i;
-      }
-    }
-  }
-}
-/***********************/
 bool is_prime(uint64_t n) {
+  // miller-rabin
   if (n < 2) {
     return false;
   }
@@ -33,7 +17,7 @@ bool is_prime(uint64_t n) {
   }
   uint32_t s = __builtin_ctzll(n - 1);
   uint64_t d = (n - 1) >> s;
-  function<bool(uint64_t)> witness = [&n, &s, &d](uint64_t a) {
+  auto witness = [&n, &s, &d](uint64_t a) {
     uint64_t cur = 1, p = d;
     while (p > 0) {
       if (p & 1) {
