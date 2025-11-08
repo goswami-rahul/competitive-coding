@@ -1,3 +1,4 @@
+// pi[i] = longest prefix == suffix at i
 vector<int> PrefixFn(const string &s) {
   vector<int> pi(s.size());
   for (int i = 1; i < (int) s.size(); ++i) {
