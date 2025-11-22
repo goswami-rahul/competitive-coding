@@ -12,29 +12,167 @@
 	// 	],
 	// 	"description": "Log output to console"
 	// }
-	"Test Cases with int": {
+	"Test Cases with auto": {
 		"prefix": "test int",
 		"isFileTemplate": true,
-		"body": "#ifdef Rahul\n#include \"RAHUL.h\"\n#else\n#include <bits\/stdc++.h>\nusing namespace std;\n#define error(...) 42;\n#endif\n#define SZ(v) static_cast<int>((v).size())\n#define ALL(vec) begin(vec), end(vec)\ntemplate<typename T> inline bool uax(T &x, T y) {return (y > x) ? x = y, true : false;}\ntemplate<typename T> inline bool uin(T &x, T y) {return (y < x) ? x = y, true : false;}\n#define Luv(...) [&] (auto &&u, auto &&v) { return __VA_ARGS__; }\nusing i64 = int64_t;\nconst int MOD = (int) 1e9 + 7;\nconst i64 INF = (i64) 1e18 + 42;\n\nint SolveCase() {\n  $0\n}\n\nint32_t main() {\n  cin.tie(nullptr) -> sync_with_stdio(false);\n  int tt; cin >> tt;\n  while (tt--) cout << SolveCase() << '\\n';\n}"
+		"body": [
+			"#ifdef Rahul",
+			"#include \"RAHUL.h\"",
+			"#else",
+			"#include <bits/stdc++.h>",
+			"using namespace std;",
+			"#define error(...) 42;",
+			"#endif",
+			"template<typename T> inline bool uax(T &x, T y) {return (y > x) ? x = y, true : false;}",
+			"template<typename T> inline bool uin(T &x, T y) {return (y < x) ? x = y, true : false;}",
+			"#define Luv(...) [&] (auto &&u, auto &&v) { return __VA_ARGS__; }",
+			"using i64 = int64_t;",
+			"",
+			"auto SolveCase() {",
+			"  $0",
+			"}",
+			"",
+			"int main() {",
+			"  cin.tie(nullptr) -> sync_with_stdio(false);",
+			"  int tt; cin >> tt;",
+			"  while (tt--) cout << SolveCase() << '\\n';",
+			"}"
+		],
 	},
 	"Test Cases with bool": {
 		"prefix": "test bool",
 		"isFileTemplate": true,
-		"body": "#ifdef Rahul\n#include \"RAHUL.h\"\n#else\n#include <bits\/stdc++.h>\nusing namespace std;\n# define error(...) 42;\n#endif\n#define SZ(v) static_cast<int>((v).size())\n#define ALL(vec) begin(vec), end(vec)\ntemplate<typename T> inline bool uax(T &x, T y) {return (y > x) ? x = y, true : false;}\ntemplate<typename T> inline bool uin(T &x, T y) {return (y < x) ? x = y, true : false;}\n#define Luv(...) [&] (auto &&u, auto &&v) { return __VA_ARGS__; }\nusing i64 = int64_t;\nconst int MOD = (int) 1e9 + 7;\nconst i64 INF = (i64) 1e18 + 42;\n\nbool SolveCase() {\n  $0\n}\n\nint32_t main() {\n  cin.tie(nullptr) -> sync_with_stdio(false);\n  int tt; cin >> tt;\n  while (tt--) cout << (SolveCase() ? \"Yes\" : \"No\") << '\\n';\n}"
+		"body": [
+			"#ifdef Rahul",
+			"#include \"RAHUL.h\"",
+			"#else",
+			"#include <bits/stdc++.h>",
+			"using namespace std;",
+			"#define error(...) 42;",
+			"#endif",
+			"template<typename T> inline bool uax(T &x, T y) {return (y > x) ? x = y, true : false;}",
+			"template<typename T> inline bool uin(T &x, T y) {return (y < x) ? x = y, true : false;}",
+			"#define Luv(...) [&] (auto &&u, auto &&v) { return __VA_ARGS__; }",
+			"using i64 = int64_t;",
+			"",
+			"bool SolveCase() {",
+			"  $0",
+			"}",
+			"",
+			"int main() {",
+			"  cin.tie(nullptr) -> sync_with_stdio(false);",
+			"  int tt; cin >> tt;",
+			"  while (tt--) cout << (SolveCase() ? \"Yes\" : \"No\") << '\\n';",
+			"}"
+		],
 	},
 	"Test Case single": {
 		"prefix": "test single",
 		"isFileTemplate": true,
-		"body": "#ifdef Rahul\n#include \"RAHUL.h\"\n#else\n#include <bits\/stdc++.h>\nusing namespace std;\n# define error(...) 42;\n#endif\n#define SZ(v) static_cast<int>((v).size())\n#define ALL(vec) begin(vec), end(vec)\ntemplate<typename T> inline bool uax(T &x, T y) {return (y > x) ? x = y, true : false;}\ntemplate<typename T> inline bool uin(T &x, T y) {return (y < x) ? x = y, true : false;}\n#define Luv(...) [&] (auto &&u, auto &&v) { return __VA_ARGS__; }\nusing i64 = int64_t;\nconst int MOD = (int) 1e9 + 7;\nconst i64 INF = (i64) 1e18 + 42;\n\nint32_t main() {\n  cin.tie(nullptr) -> sync_with_stdio(false);\n  $0\n}"
+		"body": [
+			"#ifdef Rahul",
+			"#include \"RAHUL.h\"",
+			"#else",
+			"#include <bits/stdc++.h>",
+			"using namespace std;",
+			"#define error(...) 42;",
+			"#endif",
+			"template<typename T> inline bool uax(T &x, T y) {return (y > x) ? x = y, true : false;}",
+			"template<typename T> inline bool uin(T &x, T y) {return (y < x) ? x = y, true : false;}",
+			"#define Luv(...) [&] (auto &&u, auto &&v) { return __VA_ARGS__; }",
+			"using i64 = int64_t;",
+			"",
+			"int main() {",
+			"  cin.tie(nullptr) -> sync_with_stdio(false);",
+			"  ",
+			"}"
+		],
 	},
 	"Test Cases with void": {
 		"prefix": "test void",
 		"isFileTemplate": true,
-		"body": "#ifdef Rahul\n#include \"RAHUL.h\"\n#else\n#include <bits\/stdc++.h>\nusing namespace std;\n# define error(...) 42;\n#endif\n#define SZ(v) static_cast<int>((v).size())\n#define ALL(vec) begin(vec), end(vec)\ntemplate<typename T> inline bool uax(T &x, T y) {return (y > x) ? x = y, true : false;}\ntemplate<typename T> inline bool uin(T &x, T y) {return (y < x) ? x = y, true : false;}\n#define Luv(...) [&] (auto &&u, auto &&v) { return __VA_ARGS__; }\nusing i64 = int64_t;\nconst int MOD = (int) 1e9 + 7;\nconst i64 INF = (i64) 1e18 + 42;\n\nvoid SolveCase() {\n  $0\n}\n\nint32_t main() {\n  cin.tie(nullptr) -> sync_with_stdio(false);\n  int tt; cin >> tt;\n  while (tt--) SolveCase();\n}"
+		"body": [
+			"#ifdef Rahul",
+			"#include \"RAHUL.h\"",
+			"#else",
+			"#include <bits/stdc++.h>",
+			"using namespace std;",
+			"#define error(...) 42;",
+			"#endif",
+			"template<typename T> inline bool uax(T &x, T y) {return (y > x) ? x = y, true : false;}",
+			"template<typename T> inline bool uin(T &x, T y) {return (y < x) ? x = y, true : false;}",
+			"#define Luv(...) [&] (auto &&u, auto &&v) { return __VA_ARGS__; }",
+			"using i64 = int64_t;",
+			"",
+			"void SolveCase() {",
+			"  $0",
+			"}",
+			"",
+			"int main() {",
+			"  cin.tie(nullptr) -> sync_with_stdio(false);",
+			"  int tt; cin >> tt;",
+			"  while (tt--) SolveCase();",
+			"}"
+		],
 	},
-	"Test Case clean": {
+	"Test Case z clean": {
     "prefix": "test clean",
 		"isFileTemplate": true,
-		"body": "#include<bits/stdc++.h>\n\nint main() {\n  $0\n}\n"
+		"body": [
+			"#include<bits/stdc++.h>",
+			"using namespace std;",
+			"",
+			"int main() {",
+			"  $0",
+			"}",
+			""
+		]
+	},
+	"Modulus": {
+		"prefix": "zzmod",
+		"body": [
+			"#include <atcoder/modint>",
+			"using Mint = ::atcoder::modint1000000007;",
+			"using Mint = ::atcoder::modint998244353;"
+		]
+	},
+	"Prime sieve": {
+		"prefix": "zzprime",
+		"body": [
+			"const int M = 1e6 + 42;",
+			"array<int, M> lpf;",
+			"auto primes = [](){",
+			"  vector<int> p;",
+			"  iota(lpf.begin(), lpf.end(), 0);",
+			"  for (int i = 2; i < M; ++i) {",
+			"    if (lpf[i] == i) {",
+			"      p.push_back(i);",
+			"      for (int j = i + i; j < M; j += i) {",
+			"        if (lpf[j] == j) lpf[j] = i;",
+			"      }",
+			"    }",
+			"  }",
+			"  return p;",
+			"}();",
+			""
+		]
+	},
+	"Read graph": {
+		"prefix": "zzgraph",
+		"body": [
+			"vector<vector<int>> g(n);",
+			"for (int i = 0; i < n - 1; ++i) {",
+			"  int u, v; cin >> u >> v; --u, --v;",
+			"  g[u].push_back(v);",
+			"  g[v].push_back(u);",
+			"}",
+			"auto dfs = [&] (this auto&& dfs, int u, int p) -> void {",
+			"  for (int v : g[u]) if (v != p) {",
+			"    dfs(v, u);",
+			"  }",
+			"};",
+			"dfs(0, -1);"
+		],
+		"description": "Read graph"
 	}
 }
