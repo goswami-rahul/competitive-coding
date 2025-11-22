@@ -3,7 +3,8 @@ in
 in[0-9]
 *.jar
 
-.vscode/
+.vscode/*
+!.vscode/tasks.json
 .cph/
 __pycache__
 
