@@ -1,6 +1,6 @@
 const int M = 1e6 + 42;
 array<int, M> lpf;
-auto primes = [](){
+auto primes = [&](){
   vector<int> p;
   iota(lpf.begin(), lpf.end(), 0);
   for (int i = 2; i < M; ++i) {
